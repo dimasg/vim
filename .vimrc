@@ -13,8 +13,11 @@ set modelines=0
 
 set ttyfast
 "set relativenumber
-set undofile
 set gdefault
+
+if v:version >= 730
+    set undofile
+endif
 
 "set formatoptions=qrn1
 
@@ -46,7 +49,9 @@ map Q gq
 
 syntax enable
 set number
-colorscheme darkblue
+if filereadable("$VIMPATH/colors/darkblue.vim")
+    colorscheme darkblue
+endif
 set title
 
 " from - end
@@ -69,7 +74,9 @@ set smarttab
 set expandtab
 " граница переноса
 set wrapmargin=5
-set colorcolumn=85
+if v:version >= 730
+    set colorcolumn=85
+endif
 " сколько строк повторять при скроллинге
 set scrolloff=4
 " подсветка строки и колонки курсора
@@ -155,7 +162,6 @@ endif
 "set guioptions-=m
 
 if has('gui')
-    colorscheme darkblue
     set guioptions-=T " отключить меню в GUI
     au GUIEnter * :set lines=99999 columns=99999
 endif
