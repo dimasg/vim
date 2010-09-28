@@ -49,7 +49,7 @@ map Q gq
 
 syntax enable
 set number
-if filereadable("$VIMPATH/colors/darkblue.vim")
+if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
 endif
 set title
