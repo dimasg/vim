@@ -1,181 +1,195 @@
-" An example for a vimrc file.
-"
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2002 Sep 19
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"	    for OpenVMS:  sys$login:.vimrc
+" from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
-
-" perl plugin
-
-filetype plugin on
-let g:Perl_AuthorName      = 'Dmitry Grachev'
-let g:Perl_AuthorRef       = 'dgrachev'
-let g:Perl_Email           = 'dgrachev@masterhost.ru'
-let g:Perl_Company         = '.masterhost'
-let g:Perl_PerlcriticOptions = '-profile /home/autotest/perlcriticrc '
-let g:Perl_PerlcriticSeverity = 1
-let g:Perl_PerlcriticVerbosity = 1
-
-let Tlist_Ctags_Cmd = '/home/dgrachev/bin/ctags'
+"filetype off
+"call pathogen#runtime_append_all_bundles()
+"filetype plugin indent on
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" bit prevents some security exploits 
+set modelines=0
+
+set ttyfast
+"set relativenumber
+set undofile
+set gdefault
+
+"set formatoptions=qrn1
+
+" save all at focus lost
+au FocusLost * :wa
+
+" end stevelosh
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
 if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
+    set nobackup        " do not keep a backup file, use versions instead
 else
-  set backup		" keep a backup file
+    set backup        " keep a backup file
 endif
-set history=50		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
-set incsearch		" do incremental searching
+set history=50        " keep 50 lines of command line history
+set ruler        " show the cursor position all the time
+set showcmd        " display incomplete commands
+set incsearch        " do incremental searching
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
+let &guioptions = substitute(&guioptions, "t", "", "g")
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
-
-" This is an alternative that also works in block mode, but the deleted
-" text is lost and it only works for putting the current register.
-"vnoremap p "_dp
-
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern.
-if &t_Co > 2 || has("gui_running")
-  syntax on
-  set hlsearch
-endif
 
 " from juchkov
 
 syntax enable
 set number
-set ruler
 colorscheme darkblue
-set autoindent
-"set mouse=a
 set title
-set hlsearch
-nmap <F2> <ESC>:w<CR>
-imap <F2> <ESC>:w<CR>i<Right>
-" me
-"nmap <F3> :bp!<CR> " предыдуший буффер
-"imap <F3> <Esc>:bp!<CR>a
-map <F3> :r ~/.vim/skel/func.pl<CR>$a
-nmap <F4> :bn!<CR> " следующий буффер
-imap <F4> <Esc>:bn!<CR>a
-nmap <F7> <C-W>k<C-W>_ " окно вверх
-imap <F7> <Esc><C-W>k<C-W>_a " окно вверх
-nmap <F8> <C-W>j<C-W>_ " окно вниз
-imap <F8> <Esc><C-W>j<C-W>_a " окно вниз
-nmap <F12> <ESC>:!perlcritic -profile /home/autotest/perlcriticrc ./%<CR>
-" nmap <F12> <ESC>:!perlcritic -profile ~/billing/t/perlcriticrc ./%<CR>
-" end me
-nmap <F9> <ESC>:!perl -c ./%<CR>
-imap <F9> <ESC>:!perl -cw ./%<CR>
-nmap <F5> <ESC>:!./%<CR>
-imap <F5> <ESC>:!./%<CR>
-nmap <F6> <ESC>:!./% \|less<CR>
-imap <F6> <ESC>:!./% \|less<CR>
-
-nmap <F10> <ESC>:!perl -d ./%<CR>
 
 " from - end
 
 " me - dvg
 
+" Показываем табы в начале строки точками
+"set listchars=tab:··i
+"set listchars=tab:»\ ,trail:·,eol:¶
+"set list
+
 " change rus-las with Ctrl-^
 "set keymap=russian-jcukenwin 
 set iminsert=0
 set tabstop=4
-set sw=4
+set shiftwidth=4
+set autoindent
+"set sw=4
+set smarttab
+set expandtab
+" граница переноса
+set wrapmargin=5
+set colorcolumn=85
+" сколько строк повторять при скроллинге
+set scrolloff=4
+" подсветка строки и колонки курсора
+set cursorline
+"set cursorcolumn
+set visualbell
 
-set termencoding=utf-8
+set hlsearch
+set incsearch
+set smartcase
 
-set statusline=%f\ %L%y%r%=%m\ %-15(0x%02B\ (%b)%)%-15(%l,%c%V%)%P
+" http://dimio-blog.livejournal.com/16376.html
+
+set hidden " не выгружать буфер когда переключаешься на другой
+set mouse=a " включает поддержку мыши при работе в терминале (без GUI)
+set mousehide " скрывать мышь в режиме ввода текста
+set showcmd " показывать незавершенные команды в статусбаре (автодополнение ввода)
+set matchpairs+=<:> " показывать совпадающие скобки для HTML-тегов
+set showmatch " показывать первую парную скобку после ввода второй
+set autoread " перечитывать изменённые файлы автоматически
+set t_Co=256 " использовать больше цветов в терминале
+set confirm " использовать диалоги вместо сообщений об ошибках
+"" Автоматически перечитывать конфигурацию VIM после сохранения
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+
+"" Прыгать на последнюю позицию при открытии буфера
+autocmd! bufreadpost * call LastPosition()
+	function! LastPosition()
+		if line("'\"")<=line('$')
+			normal! `"
+		endif
+	endfunction
+set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
+
+" При вставке фрагмента сохраняет отступы
+"set pastetoggle=
+
+"Настройки сворачивания блоков кода (фолдинг)
+"set foldenable " включить фолдинг
+"set foldmethod=syntax " определять блоки на основе синтаксиса файла
+"set foldcolumn=3 " показать полосу для управления сворачиванием
+"set foldlevel=1 " Первый уровень вложенности открыт, остальные закрыты
+"let perl_folding=1 " правильное сворачивание классов и функций Perl
+"let php_folding=1 " правильное сворачивание классов и функций PHP
+"set foldopen=all " автоматическое открытие сверток при заходе в них
+
+" Для указанных типов файлов отключает замену табов пробелами и меняет ширину отступа
+au FileType crontab,fstab,make set noexpandtab tabstop=8 shiftwidth=8
+
+"" Применять типы файлов
+filetype on
+filetype plugin on
+filetype indent on
+"" Если сохраняемый файл является файлом скрипта - сделать его исполняемым
+"" au BufWritePost * if getline(1) =~ "^#!.*/bin/"|silent !chmod a+x %|endif
+"" При открытии файла задавать для него соответствующий 'компилятор'
+autocmd! BufEnter *.pl compiler perl
+
+"" Переключение кодировок файла
+set wildmenu
+set wcm=<Tab>
+menu Encoding.CP1251   :e ++enc=cp1251<CR>
+menu Encoding.CP866    :e ++enc=cp866<CR>
+menu Encoding.KOI8-U   :e ++enc=koi8-u<CR>
+menu Encoding.UTF-8    :e ++enc=utf-8<CR>
+map <F8> :emenu Encoding.<TAB>
+
+" end dimio-blog
+
+set lz
+
+"set encoding=cp1251
+"set termencoding=utf-8
+set fileencodings=utf-8,cp1251,koi8-r,cp866
+set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
+
+if !has("gui_running")
+    set mouse=a
+endif
+
+" Избавляемся от меню и тулбара:
+"set guioptions-=T
+"set guioptions-=m
+
+if has('gui')
+    colorscheme darkblue
+    set guioptions-=T " отключить меню в GUI
+    au GUIEnter * :set lines=99999 columns=99999
+endif
+" В разных графических системах используем разные шрифты:
+if has('win32')
+    set guifont=Lucida_Console:h11:cRUSSIAN::
+    behave xterm
+else
+    set guifont=Terminus\ 14
+endif
+
+
+nmap <F2> <ESC>:w<CR>
+imap <F2> <ESC>:w<CR>i<Right>
+
+inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
+
+set statusline=%f\ %L%y%r\ [%{&ff}][%{&fenc}]\ %=%m\ %-15(0x%02B\ (%b)%)%-15(%l,%c%V%)%P
 set laststatus=2
 
 " dvg - end
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
-
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-
-  augroup END
-
-else
-
-  set autoindent		" always set autoindenting on
-
-endif " has("autocmd")
-
-" Ловля имени редактируемого файла из vim'а. Файл .vimrc (^[ вводится как Ctrl+V Esc)
-
-"set titlestring=%t-dsd
-set titleold=bash
-
-let &titlestring = "vim (" . expand("%:t") . ")"
-
-if &term == "screen"
-	set t_ts=k
-	set t_fs=\
-endif
-
-if &term == "screen" || &term == "xterm"
-	set title
-endif
-
-"set term=xterm
-
-"setlocal spell spelllang=ru
-
 " tab navigation like firefox
-	nmap <C-S-tab> :tabprevious<cr>
-	nmap <C-tab> :tabnext<cr>
-	map <C-S-tab> :tabprevious<cr>
-	map <C-tab> :tabnext<cr>
-	imap <C-S-tab> <ESC>:tabprevious<cr>i
-	imap <C-tab> <ESC>:tabnext<cr>i
-	nmap <C-t> :tabnew<cr>
-	imap <C-t> <ESC>:tabnew<cr>
-	map <C-w> :tabclose<cr>
-	imap <C-w> :tabclose<cr>
-	nmap Z :tabprev<cr>
-	nmap X :tabnext<cr>
+    nmap <C-S-tab> :tabprevious<cr>
+    nmap <C-tab> :tabnext<cr>
+    map <C-S-tab> :tabprevious<cr>
+    map <C-tab> :tabnext<cr>
+    imap <C-S-tab> <ESC>:tabprevious<cr>i
+    imap <C-tab> <ESC>:tabnext<cr>i
+    nmap <C-t> :tabnew<cr>
+    imap <C-t> <ESC>:tabnew<cr>
+    map <C-w> :tabclose<cr>
+    imap <C-w> :tabclose<cr>
+    nmap Z :tabprev<cr>
+    nmap X :tabnext<cr>
 
-
+" end of file
