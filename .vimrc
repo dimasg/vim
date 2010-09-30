@@ -47,7 +47,6 @@ map Q gq
 
 " from juchkov
 
-syntax enable
 set number
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
@@ -84,7 +83,10 @@ set cursorline
 "set cursorcolumn
 set visualbell
 
-set hlsearch
+if &t_Co > 2 || has("gui_running")
+    syntax enable
+    set hlsearch
+endif
 set incsearch
 set smartcase
 
@@ -97,7 +99,9 @@ set showcmd " показывать незавершенные команды в 
 set matchpairs+=<:> " показывать совпадающие скобки для HTML-тегов
 set showmatch " показывать первую парную скобку после ввода второй
 set autoread " перечитывать изменённые файлы автоматически
-set t_Co=256 " использовать больше цветов в терминале
+if has('win32')
+    set t_Co=256 " использовать больше цветов в терминале
+endif
 set confirm " использовать диалоги вместо сообщений об ошибках
 "" Автоматически перечитывать конфигурацию VIM после сохранения
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
