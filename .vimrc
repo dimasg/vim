@@ -12,6 +12,7 @@ set nocompatible
 set modelines=0
 
 set ttyfast
+"set relativenumber
 set gdefault
 
 if v:version >= 730
@@ -29,18 +30,17 @@ au FocusLost * :wa
 set backspace=indent,eol,start
 
 if has("vms")
-    set nobackup    " do not keep a backup file, use versions instead
+    set nobackup        " do not keep a backup file, use versions instead
 else
-    set backup      " keep a backup file
+    set backup        " keep a backup file
 endif
-set history=50      " keep 50 lines of command line history
-set ruler           " show the cursor position all the time
+set history=50        " keep 50 lines of command line history
+set ruler        " show the cursor position all the time
+set showcmd        " display incomplete commands
+set incsearch        " do incremental searching
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 let &guioptions = substitute(&guioptions, "t", "", "g")
-" Избавляемся от меню и тулбара:
-"set guioptions-=T
-"set guioptions-=m
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
@@ -48,7 +48,6 @@ map Q gq
 " from juchkov
 
 set number
-"set relativenumber
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
 endif
@@ -88,27 +87,26 @@ if &t_Co > 2 || has("gui_running")
     syntax enable
     set hlsearch
 endif
-set incsearch        " do incremental searching
+set incsearch
 set smartcase
 
 " http://dimio-blog.livejournal.com/16376.html
 
-set hidden          " не выгружать буфер когда переключаешься на другой
-set mouse=a         " включает поддержку мыши при работе в терминале (без GUI)
-set mousehide       " скрывать мышь в режиме ввода текста
-set showcmd         " показывать незавершенные команды в статусбаре (автодополнение ввода)
+set hidden " не выгружать буфер когда переключаешься на другой
+set mouse=a " включает поддержку мыши при работе в терминале (без GUI)
+set mousehide " скрывать мышь в режиме ввода текста
+set showcmd " показывать незавершенные команды в статусбаре (автодополнение ввода)
 set matchpairs+=<:> " показывать совпадающие скобки для HTML-тегов
-set showmatch       " показывать первую парную скобку после ввода второй
-set autoread        " перечитывать изменённые файлы автоматически
+set showmatch " показывать первую парную скобку после ввода второй
+set autoread " перечитывать изменённые файлы автоматически
 if has('win32')
-    set t_Co=256    " использовать больше цветов в терминале
+    set t_Co=256 " использовать больше цветов в терминале
 endif
-set confirm         " использовать диалоги вместо сообщений об ошибках
-
-" Автоматически перечитывать конфигурацию VIM после сохранения
+set confirm " использовать диалоги вместо сообщений об ошибках
+"" Автоматически перечитывать конфигурацию VIM после сохранения
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
-" Прыгать на последнюю позицию при открытии буфера
+"" Прыгать на последнюю позицию при открытии буфера
 autocmd! bufreadpost * call LastPosition()
 	function! LastPosition()
 		if line("'\"")<=line('$')
@@ -152,7 +150,7 @@ map <F8> :emenu Encoding.<TAB>
 
 " end dimio-blog
 
-set lazyredraw
+set lz
 
 "set encoding=cp1251
 "set termencoding=utf-8
@@ -162,6 +160,10 @@ set fileformats=unix,dos,mac " формат файла по умолчанию (
 if !has("gui_running")
     set mouse=a
 endif
+
+" Избавляемся от меню и тулбара:
+"set guioptions-=T
+"set guioptions-=m
 
 if has('gui')
     set guioptions-=T " отключить меню в GUI
@@ -175,14 +177,16 @@ else
     set guifont=Terminus\ 14
 endif
 
-" сохраняемся по F2
+
 nmap <F2> <ESC>:w<CR>
 imap <F2> <ESC>:w<CR>i<Right>
-" ?
+
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
 set statusline=%f\ %L%y%r\ [%{&ff}][%{&fenc}]\ %=%m\ %-15(0x%02B\ (%b)%)%-15(%l,%c%V%)%P
 set laststatus=2
+
+" dvg - end
 
 " tab navigation like firefox
     nmap <C-S-tab> :tabprevious<cr>
@@ -198,5 +202,4 @@ set laststatus=2
     nmap Z :tabprev<cr>
     nmap X :tabnext<cr>
 
-" dvg - end
 " end of file
