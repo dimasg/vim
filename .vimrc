@@ -45,18 +45,22 @@ let &guioptions = substitute(&guioptions, "t", "", "g")
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
-" from juchkov
-
 set number
 "set relativenumber
+
+if has('win32') || has("gui_running")
+    set t_Co=256    " использовать больше цветов в терминале
+endif
+if &t_Co > 2
+    syntax enable
+    set hlsearch
+endif
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
+    " немного "доведем до ума" схему для x-терминала
+    highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
 endif
 set title
-
-" from - end
-
-" me - dvg
 
 " Показываем табы в начале строки точками
 "set listchars=tab:··i
@@ -73,7 +77,7 @@ set autoindent
 set smarttab
 set expandtab
 " граница переноса
-set wrapmargin=5
+"set wrapmargin=5
 if v:version >= 730
     set colorcolumn=85
 endif
@@ -84,10 +88,6 @@ set cursorline
 "set cursorcolumn
 set visualbell
 
-if &t_Co > 2 || has("gui_running")
-    syntax enable
-    set hlsearch
-endif
 set incsearch        " do incremental searching
 set smartcase
 
@@ -100,9 +100,6 @@ set showcmd         " показывать незавершенные коман
 set matchpairs+=<:> " показывать совпадающие скобки для HTML-тегов
 set showmatch       " показывать первую парную скобку после ввода второй
 set autoread        " перечитывать изменённые файлы автоматически
-if has('win32')
-    set t_Co=256    " использовать больше цветов в терминале
-endif
 set confirm         " использовать диалоги вместо сообщений об ошибках
 
 " Автоматически перечитывать конфигурацию VIM после сохранения
