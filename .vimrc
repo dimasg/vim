@@ -58,7 +58,7 @@ endif
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
     " немного "доведем до ума" схему
-    if has('gui') || !has('win32')
+    if has('gui') || has('win32')
         highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
     endif
     highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
@@ -116,7 +116,9 @@ set textwidth=128
 " сколько строк повторять при скроллинге
 set scrolloff=4
 " подсветка строки и колонки курсора
-set cursorline
+if v:version >= 700
+    set cursorline
+endif
 "set cursorcolumn
 set visualbell
 " миннимальная высота окна
@@ -149,7 +151,12 @@ autocmd! bufreadpost * call LastPosition()
             normal! `"
         endif
     endfunction
-set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
+    
+if version >= 700
+    set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
+else
+    set sessionoptions=curdir,buffers
+endif
 
 " При вставке фрагмента сохраняет отступы
 "set pastetoggle=
@@ -219,6 +226,7 @@ set statusline=%f\ %L%y%r\ [%{&ff}][%{&fenc}]\ %=%m\ %-15(0x%02B\ (%b)%)%-15(%l,
 set laststatus=2
 
 " tab navigation like firefox
+if version >= 700
     nmap <C-S-tab> :tabprevious<cr>
     nmap <C-tab> :tabnext<cr>
     map <C-S-tab> :tabprevious<cr>
@@ -231,6 +239,7 @@ set laststatus=2
     imap <C-w> :tabclose<cr>
     nmap Z :tabprev<cr>
     nmap X :tabnext<cr>
+endif
 
 " dvg - end
 " end of file
