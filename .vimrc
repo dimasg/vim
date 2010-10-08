@@ -144,11 +144,11 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " Прыгать на последнюю позицию при открытии буфера
 autocmd! bufreadpost * call LastPosition()
-	function! LastPosition()
-		if line("'\"")<=line('$')
-			normal! `"
-		endif
-	endfunction
+    function! LastPosition()
+        if line("'\"")<=line('$')
+            normal! `"
+        endif
+    endfunction
 set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
 
 " При вставке фрагмента сохраняет отступы
