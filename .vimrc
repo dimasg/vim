@@ -57,8 +57,11 @@ if &t_Co > 2
 endif
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
-    " немного "доведем до ума" схему для x-терминала
-    highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+    " немного "доведем до ума" схему
+    if has('gui') || !has('win32')
+        highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+    endif
+    highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
 endif
 set title
 
@@ -68,8 +71,34 @@ set title
 "set list
 
 " change rus-las with Ctrl-^
-"set keymap=russian-jcukenwin 
+set keymap=russian-jcukenwin
+"setlocal spell spelllang=ru_yo,en_us
+" циклическое переключение спелл-чекера (взято с www.opennet.ru/base/X/vim_orfo.txt.html)
+if version >= 700
+"   По умолчанию проверка орфографии выключена.
+    setlocal spell spelllang=
+    setlocal nospell
+    function ChangeSpellLang()
+        if &spelllang =~ "en_us"
+            setlocal spell spelllang=ru
+            echo "spelllang: ru"
+        elseif &spelllang =~ "ru"
+            setlocal spell spelllang=
+            setlocal nospell
+            echo "spelllang: off"
+        else
+            setlocal spell spelllang=en_us
+            echo "spelllang: en"
+        endif
+    endfunc
+
+    " map spell on/off for English/Russian
+    map <F11> <Esc>:call ChangeSpellLang()<CR>
+endif
+" по умолчанию латинская раскладка
 set iminsert=0
+" по умолчанию поиск латиницей
+set imsearch=0
 set tabstop=4
 set shiftwidth=4
 set autoindent
@@ -77,16 +106,24 @@ set autoindent
 set smarttab
 set expandtab
 " граница переноса
-"set wrapmargin=5
+set wrapmargin=5
+" подсветим 85ю колонку
 if v:version >= 730
     set colorcolumn=85
 endif
+" автоматический перенос после 128 колонки
+set textwidth=128
 " сколько строк повторять при скроллинге
 set scrolloff=4
 " подсветка строки и колонки курсора
 set cursorline
 "set cursorcolumn
 set visualbell
+" миннимальная высота окна
+set winminheight=0
+" делать активное окон максимального размера
+set noequalalways
+set winheight=999
 
 set incsearch        " do incremental searching
 set smartcase
