@@ -58,7 +58,7 @@ endif
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
     " немного "доведем до ума" схему
-    if has('gui') || has('win32')
+    if has('gui') || !has('win32')
         highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
     endif
     highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
@@ -71,7 +71,9 @@ set title
 "set list
 
 " change rus-las with Ctrl-^
-set keymap=russian-jcukenwin
+if filereadable(expand("$VIMRUNTIME/keymap/russian-jcukenwin.vim"))
+    set keymap=russian-jcukenwin
+endif
 "setlocal spell spelllang=ru_yo,en_us
 " циклическое переключение спелл-чекера (взято с www.opennet.ru/base/X/vim_orfo.txt.html)
 if version >= 700
