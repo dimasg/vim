@@ -2,12 +2,12 @@
 
 # ruby original from http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
-from os         import chdir, chmod, makedirs, remove, rmdir, system;
+from os         import chdir, chmod, makedirs, remove, rename, rmdir, system;
 from os.path    import *;
 from re         import match;
 from shutil     import rmtree;
 from stat       import S_IWRITE;
-from sys        import exit;
+from sys        import exit, platform;
 from urllib2    import urlopen;
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
@@ -21,22 +21,30 @@ def remove_readonly(fn, path, excinfo):
 
 git_bundles = [ 
     "git://github.com/msanders/snipmate.vim.git",
+    "git://github.com/scrooloose/snipmate-snippets.git",
+#    "git://github.com/scrooloose/nerdtree.git",
+#    "git://github.com/tpope/vim-fugitive.git",
+    "git://github.com/motemen/git-vim.git",
+    "git://github.com/tsaleh/vim-supertab.git",
+    "git://github.com/tsaleh/vim-tcomment.git",
 ]
 
 vim_org_scripts = [
-    ["jquery",      "12107",    "syntax"],
+    ["jquery",      "12276",    "syntax"],
     ["python",      "12804",    "syntax"],
+    ["ScrollColor", "5966",     "utility"],
 ]
 
-bundles_dir = expanduser("~/.vim/bundle");
+if platform == 'win32':
+    bundles_dir = expanduser("~/vimfiles/bundle")
+else:
+    bundles_dir = expanduser("~/.vim/bundle")
 
 if not exists(bundles_dir):
     print '{0} does not exists!'.format(bundles_dir)
     exit(2)
 
-# chdir( bundles_dir )
-
-rmtree( bundles_dir, onerror=remove_readonly )
+rename( bundles_dir, bundles_dir+'.old' );
 
 for name, id, type in vim_org_scripts:
     local_dir = join( bundles_dir, name, type )
@@ -57,6 +65,8 @@ for git_url in git_bundles:
     makedirs( local_dir )
     system( 'git clone {0} "{1}"'.format( git_url, local_dir ) )
     rmtree( join( local_dir, '.git' ), onerror=remove_readonly )
+
+rmtree( bundles_dir+'.old', onerror=remove_readonly )
 
 exit(0)
 
