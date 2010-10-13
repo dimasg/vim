@@ -1,8 +1,11 @@
 " from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-"filetype off
-"call pathogen#runtime_append_all_bundles()
-"filetype plugin indent on
+if exists('pathogen')
+    filetype off
+    call pathogen#helptags()
+    call pathogen#runtime_append_all_bundles()
+    filetype plugin indent on
+endif
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
