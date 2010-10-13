@@ -1,0 +1,62 @@
+#!/usr/bin/python
+
+# ruby original from http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
+
+from os         import chdir, chmod, makedirs, remove, rmdir, system;
+from os.path    import *;
+from re         import match;
+from shutil     import rmtree;
+from stat       import S_IWRITE;
+from sys        import exit;
+from urllib2    import urlopen;
+
+# from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
+def remove_readonly(fn, path, excinfo):
+    if fn is rmdir:
+        chmod(path, S_IWRITE)
+        rmdir(path)
+    elif fn is remove:
+        chmod(path, S_IWRITE)
+        remove(path)
+
+git_bundles = [ 
+    "git://github.com/msanders/snipmate.vim.git",
+]
+
+vim_org_scripts = [
+    ["jquery",      "12107",    "syntax"],
+    ["python",      "12804",    "syntax"],
+]
+
+bundles_dir = expanduser("~/.vim/bundle");
+
+if not exists(bundles_dir):
+    print '{0} does not exists!'.format(bundles_dir)
+    exit(2)
+
+# chdir( bundles_dir )
+
+rmtree( bundles_dir, onerror=remove_readonly )
+
+for name, id, type in vim_org_scripts:
+    local_dir = join( bundles_dir, name, type )
+    print 'Downloading {0} to {1}'.format( name, local_dir )
+    makedirs( local_dir )
+    url = urlopen( 'http://www.vim.org/scripts/download_script.php?src_id={0}'.format(id) )
+    local_file = open( join(local_dir,'{0}.vim'.format(name)), 'w' )
+    local_file.write( url.read() )
+    local_file.close()
+
+for git_url in git_bundles:
+    git_name = git_url.split('/')[-1].rpartition('.')[0]
+    if git_name == None:
+        print '{0} parsing name error'.format( git_url );
+        exit(3)
+    local_dir = join( bundles_dir, git_name )
+    print 'Unpacking {0} to {1}'.format( git_url, local_dir )
+    makedirs( local_dir )
+    system( 'git clone {0} "{1}"'.format( git_url, local_dir ) )
+    rmtree( join( local_dir, '.git' ), onerror=remove_readonly )
+
+exit(0)
+
