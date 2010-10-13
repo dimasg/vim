@@ -61,7 +61,7 @@ endif
 if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     colorscheme darkblue
     " немного "доведем до ума" схему
-    if has('gui') || has('win32')
+    if has('gui')
         highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
     endif
     highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
