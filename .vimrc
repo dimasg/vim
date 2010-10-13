@@ -74,7 +74,9 @@ set title
 "set list
 
 " change rus-las with Ctrl-^
-set keymap=russian-jcukenwin
+if filereadable(expand("$VIMRUNTIME/keymap/russian-jcukenwin.vim"))
+    set keymap=russian-jcukenwin
+endif
 "setlocal spell spelllang=ru_yo,en_us
 " циклическое переключение спелл-чекера (взято с www.opennet.ru/base/X/vim_orfo.txt.html)
 if version >= 700
