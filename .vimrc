@@ -248,5 +248,18 @@ if version >= 700
     nmap X :tabnext<cr>
 endif
 
+" хранить swap-файлы будем в одном месте, чтобы не мешались
+if has('win32')
+    let swap_dir=expand("$HOME/vimfiles/swapfiles/")
+else
+    let swap_dir=expand("$HOME/.vim/swapfiles/")
+endif
+
+if !isdirectory(swap_dir)
+    call mkdir(swap_dir)
+endif
+
+let &dir=swap_dir
+
 " dvg - end
 " end of file
