@@ -1,8 +1,8 @@
-language messages en
-
 if has('win32')
+    language messages en
     let vimfiles_dir=expand("$HOME/vimfiles/")
 else
+    language messages en_US.UTF-8
     let vimfiles_dir=expand("$HOME/.vim/")
 endif
 
@@ -262,11 +262,13 @@ endif
 " хранить swap-файлы будем в одном месте, чтобы не мешались
 let swap_dir=vimfiles_dir.'swapfiles/'
 
-if !isdirectory(swap_dir)
+if !isdirectory(swap_dir) && exists('*mkdir')
     call mkdir(swap_dir)
 endif
 
-let &dir=swap_dir
+if isdirectory(swap_dir)
+    let &dir=swap_dir
+endif
 
 " dvg - end
 " end of file
