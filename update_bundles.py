@@ -30,9 +30,10 @@ git_bundles = [
 ]
 
 vim_org_scripts = [
-    ["jquery",      "12276",    "syntax"],
-    ["python",      "12804",    "syntax"],
-    ["ScrollColor", "5966",     "utility"],
+    ["jquery",          "12276",    "syntax"],
+    ["python",          "12804",    "syntax"],
+    ["ScrollColor",     "5966",     "plugin"],
+    ["ColorSamplerPack","12179",    "plugin"],
 ]
 
 if platform == 'win32':
