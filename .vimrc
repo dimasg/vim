@@ -1,8 +1,14 @@
 language messages en
 
+if has('win32')
+    let vimfiles_dir=expand("$HOME/vimfiles/")
+else
+    let vimfiles_dir=expand("$HOME/.vim/")
+endif
+
 " from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-if exists('pathogen')
+if filereadable(vimfiles_dir."autoload/pathogen.vim")
     filetype off
     call pathogen#helptags()
     call pathogen#runtime_append_all_bundles()
@@ -65,6 +71,8 @@ if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
     " немного "доведем до ума" схему
     if has('gui')
         highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+    else
+        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
     endif
     highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
 endif
@@ -248,12 +256,11 @@ if version >= 700
     nmap X :tabnext<cr>
 endif
 
+"ino <tab> <c-r>=TriggerSnippet()<cr>
+"snor <tab> <esc>i<right><c-r>=TriggerSnippet()<cr>
+
 " хранить swap-файлы будем в одном месте, чтобы не мешались
-if has('win32')
-    let swap_dir=expand("$HOME/vimfiles/swapfiles/")
-else
-    let swap_dir=expand("$HOME/.vim/swapfiles/")
-endif
+let swap_dir=vimfiles_dir.'swapfiles/'
 
 if !isdirectory(swap_dir)
     call mkdir(swap_dir)
