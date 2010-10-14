@@ -1,3 +1,5 @@
+language messages en
+
 " from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
 if exists('pathogen')
