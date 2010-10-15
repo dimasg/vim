@@ -30,10 +30,10 @@ git_bundles = [
 ]
 
 vim_org_scripts = [
-    ["jquery",          "12276",    "syntax"],
-    ["python",          "12804",    "syntax"],
-    ["ScrollColor",     "5966",     "plugin"],
-    ["ColorSamplerPack","12179",    "plugin"],
+    ["jquery",          "vim", "12276",    "syntax"],
+    ["python",          "vim", "12804",    "syntax"],
+    ["ScrollColor",     "vim", "5966",     "plugin"],
+    ["ColorSamplerPack","zip", "12179",    "archive"],
 ]
 
 if platform == 'win32':
@@ -47,12 +47,12 @@ if not exists(bundles_dir):
 
 rename( bundles_dir, bundles_dir+'.old' );
 
-for name, id, type in vim_org_scripts:
+for name, ext, id, type in vim_org_scripts:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading {0} to {1}'.format( name, local_dir )
     makedirs( local_dir )
     url = urlopen( 'http://www.vim.org/scripts/download_script.php?src_id={0}'.format(id) )
-    local_file = open( join(local_dir,'{0}.vim'.format(name)), 'w' )
+    local_file = open( join(local_dir,'{0}.{1}'.format(name,ext)), 'w' )
     local_file.write( url.read() )
     local_file.close()
 
