@@ -24,8 +24,9 @@ git_bundles = [
 #    "git://github.com/scrooloose/nerdtree.git",
     "git://github.com/msanders/snipmate.vim.git",
     "git://github.com/scrooloose/snipmate-snippets.git",
-    "http://github.com/tpope/vim-surround.git",
 #    "git://github.com/tpope/vim-fugitive.git",
+    "git://github.com/tpope/vim-ragtag.git"
+    "git://github.com/tpope/vim-surround.git",
     "git://github.com/tsaleh/vim-supertab.git",
     "git://github.com/tsaleh/vim-tcomment.git",
 ]
