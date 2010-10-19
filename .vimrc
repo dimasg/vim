@@ -93,6 +93,7 @@ if version >= 700
 "   По умолчанию проверка орфографии выключена.
     setlocal spell spelllang=
     setlocal nospell
+    "
     function ChangeSpellLang()
         if &spelllang =~ "en_us"
             setlocal spell spelllang=ru
@@ -161,11 +162,15 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 " Прыгать на последнюю позицию при открытии буфера
 autocmd! bufreadpost * call LastPosition()
-    function! LastPosition()
-        if line("'\"")<=line('$')
+"
+function! LastPosition()
+    " не меняем позицию при коммите 
+    if expand("<afile>:s? \d+??") != '.git\COMMIT_EDITMSG'
+        if expand("<afile>:t") != ".git" && line("'\"")<=line('$')
             normal! `"
         endif
-    endfunction
+    endif
+endfunction
     
 if version >= 700
     set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
@@ -238,6 +243,7 @@ imap <F2> <ESC>:w<CR>i<Right>
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
 set statusline=%f\ %L%y%r\ [%{&ff}][%{&fenc}]\ %=%m\ %-15(0x%02B\ (%b)%)%-15(%l,%c%V%)%P
+" %{GitBranch()}\ 
 set laststatus=2
 
 " tab navigation like firefox
