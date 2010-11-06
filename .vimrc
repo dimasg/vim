@@ -47,12 +47,6 @@ endif
 set history=50      " keep 50 lines of command line history
 set ruler           " show the cursor position all the time
 
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-let &guioptions = substitute(&guioptions, "t", "", "g")
-" Избавляемся от меню и тулбара:
-"set guioptions-=T
-"set guioptions-=m
-
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
@@ -232,7 +226,12 @@ if !has("gui_running")
 endif
 
 if has('gui')
-    set guioptions-=T " отключить меню в GUI
+    " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+    if has('win32')
+        let &guioptions = substitute(&guioptions, "t", "", "g")
+    endif
+    set guioptions-=T " отключить тулбар в GUI
+    "set guioptions-=m " отключить меню  
     au GUIEnter * :set lines=99999 columns=99999
 endif
 " В разных графических системах используем разные шрифты:
