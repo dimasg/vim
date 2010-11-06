@@ -221,6 +221,18 @@ set lazyredraw
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
 
+" Ловля имени редактируемого файла из vim'а. Файл .vimrc (^[ вводится как Ctrl+V Esc)
+"set titlestring=%t-dsd
+"set titleold=&titlestring
+let &titlestring = "vim (" . expand("%:t") . ")"
+if &term == "screen"
+    set t_ts=k
+    set t_fs=\
+endif
+if &term == "screen" || &term == "xterm"
+    set title
+endif
+
 if !has("gui_running")
     set mouse=a
 endif
