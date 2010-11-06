@@ -73,7 +73,11 @@ if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
         highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
     else
         if !has('win32')
-            highlight StatusLine ctermfg=blue term=bold
+            if &term == "xterm"
+                highlight StatusLine ctermfg=blue term=bold
+            else
+                highlight StatusLine ctermfg=black term=bold
+            endif
         endif
         highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
     endif
