@@ -34,6 +34,7 @@ git_bundles = [
 vim_org_scripts = [
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
+    ["javascript",      "vim", "10728",    "syntax"],
     ["ScrollColor",     "vim", "5966",     "plugin"],
     ["ColorSamplerPack","zip", "12179",    "archive"],
 ]
