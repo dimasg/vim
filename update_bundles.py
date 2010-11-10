@@ -31,6 +31,10 @@ git_bundles = [
     "git://github.com/tsaleh/vim-tcomment.git",
 ]
 
+svn_bundles = [
+    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
+]
+
 vim_org_scripts = [
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
@@ -69,6 +73,13 @@ for git_url in git_bundles:
     makedirs( local_dir )
     system( 'git clone {0} "{1}"'.format( git_url, local_dir ) )
     rmtree( join( local_dir, '.git' ), onerror=remove_readonly )
+
+for name, svn_url in svn_bundles:
+    local_dir = join( bundles_dir, name )
+    print 'Unpacking {0} to {1}'.format( svn_url, local_dir )
+    makedirs( local_dir )
+    system( 'svn checkout {0} "{1}"'.format( svn_url, local_dir ) )
+    rmtree( join( local_dir, '.svn' ), onerror=remove_readonly )
 
 rmtree( bundles_dir+'.old', onerror=remove_readonly )
 
