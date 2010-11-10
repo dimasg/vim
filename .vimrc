@@ -159,10 +159,10 @@ set autoread        " перечитывать изменённые файлы �
 set confirm         " использовать диалоги вместо сообщений об ошибках
 
 " Автоматически перечитывать конфигурацию VIM после сохранения
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 
 " Прыгать на последнюю позицию при открытии буфера
-autocmd! bufreadpost * call LastPosition()
+autocmd! BufReadPost * call LastPosition()
 "
 function! LastPosition()
     " не меняем позицию при коммите 
@@ -221,7 +221,7 @@ set lazyredraw
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
 
-" Ловля имени редактируемого файла из vim'а. Файл .vimrc (^[ вводится как Ctrl+V Esc)
+" Ловля имени редактируемого файла из vim'а. (^[ вводится как Ctrl+V Esc)
 "set titlestring=%t-dsd
 "set titleold=&titlestring
 let &titlestring = "vim (" . expand("%:t") . ")"
@@ -232,6 +232,12 @@ endif
 if &term == "screen" || &term == "xterm"
     set title
 endif
+
+autocmd! BufEnter * call NextTabOpened()
+"
+function! NextTabOpened()
+    let &titlestring = "vim (" . expand("%:t") . ")"
+endfunction
 
 if !has("gui_running")
     set mouse=a
