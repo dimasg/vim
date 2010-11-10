@@ -5,7 +5,7 @@
 from os         import chdir, chmod, makedirs, remove, rename, rmdir, system;
 from os.path    import *;
 from re         import match;
-from shutil     import rmtree;
+from shutil     import copytree,rmtree;
 from stat       import S_IWRITE;
 from sys        import exit, platform;
 from urllib2    import urlopen;
@@ -18,6 +18,8 @@ def remove_readonly(fn, path, excinfo):
     elif fn is remove:
         chmod(path, S_IWRITE)
         remove(path)
+
+pathogen_git = "git://github.com/tpope/vim-pathogen.git";
 
 git_bundles = [ 
     "git://github.com/motemen/git-vim.git",
@@ -44,13 +46,24 @@ vim_org_scripts = [
 ]
 
 if platform == 'win32':
-    bundles_dir = expanduser("~/vimfiles/bundle")
+    vim_dir = expanduser("~/vimfiles")
 else:
-    bundles_dir = expanduser("~/.vim/bundle")
+    vim_dir = expanduser("~/.vim")
+
+bundles_dir = join( vim_dir, "bundle" )
 
 if not exists(bundles_dir):
     print '{0} does not exists!'.format(bundles_dir)
     exit(2)
+
+tmp_dir = join( vim_dir, "tmp" )
+local_dir = join( vim_dir, "autoload" )
+if exists( local_dir ):
+    rename( local_dir, local_dir+'.old' )
+print 'Unpacking pathogen from {0} to {1}'.format(pathogen_git,tmp_dir)
+system( 'git clone {0} "{1}"'.format( pathogen_git, tmp_dir ) )
+copytree( join(tmp_dir,"autoload"), local_dir )
+rmtree( tmp_dir, onerror=remove_readonly )
 
 rename( bundles_dir, bundles_dir+'.old' );
 
