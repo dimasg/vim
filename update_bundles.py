@@ -45,6 +45,12 @@ vim_org_scripts = [
     ["ColorSamplerPack","zip", "12179",    "archive"],
 ]
 
+other_scripts = [
+    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
+    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
+    ["http://hlabs.spb.ru/vim/rcs.vim", "vim", "syntax"],
+]
+
 if platform == 'win32':
     vim_dir = expanduser("~/vimfiles")
 else:
@@ -72,6 +78,16 @@ for name, ext, id, type in vim_org_scripts:
     print 'Downloading {0} to {1}'.format( name, local_dir )
     makedirs( local_dir )
     url = urlopen( 'http://www.vim.org/scripts/download_script.php?src_id={0}'.format(id) )
+    local_file = open( join(local_dir,'{0}.{1}'.format(name,ext)), 'w' )
+    local_file.write( url.read() )
+    local_file.close()
+
+for url, ext, type in other_scripts:
+    name = url.split('/')[-1].rpartition('.')[0]
+    local_dir = join( bundles_dir, name, type )
+    print 'Downloading {0} to {1}'.format( url, local_dir )
+    makedirs( local_dir )
+    url = urlopen( url )
     local_file = open( join(local_dir,'{0}.{1}'.format(name,ext)), 'w' )
     local_file.write( url.read() )
     local_file.close()
