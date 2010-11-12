@@ -46,9 +46,9 @@ vim_org_scripts = [
 ]
 
 other_scripts = [
-    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
-    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
-    ["http://hlabs.spb.ru/vim/rcs.vim", "vim", "syntax"],
+#    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
+#    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
+#    ["http://hlabs.spb.ru/vim/rcs.vim", "vim", "syntax"],
 ]
 
 if platform == 'win32':
