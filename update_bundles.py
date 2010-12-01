@@ -22,7 +22,8 @@ def remove_readonly(fn, path, excinfo):
 pathogen_git = "git://github.com/tpope/vim-pathogen.git";
 
 git_bundles = [
-    "git://github.com/joestelmach/javaScriptLint.vim.git",
+    "git://github.com/hallettj/jslint.vim.git",
+#    "git://github.com/joestelmach/javaScriptLint.vim.git",
     "git://github.com/motemen/git-vim.git",
 #    "git://github.com/scrooloose/nerdtree.git",
     "git://github.com/kevinw/pyflakes-vim.git",
