@@ -24,6 +24,7 @@ pathogen_git = "git://github.com/tpope/vim-pathogen.git";
 git_bundles = [ 
     "git://github.com/motemen/git-vim.git",
 #    "git://github.com/scrooloose/nerdtree.git",
+    "git://github.com/kevinw/pyflakes-vim.git",
     "git://github.com/msanders/snipmate.vim.git",
     "git://github.com/scrooloose/snipmate-snippets.git",
 #    "git://github.com/tpope/vim-fugitive.git",
