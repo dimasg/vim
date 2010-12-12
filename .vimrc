@@ -90,7 +90,7 @@ if filereadable(expand("$VIMRUNTIME/keymap/russian-jcukenwin.vim"))
 endif
 "setlocal spell spelllang=ru_yo,en_us
 " циклическое переключение спелл-чекера (взято с www.opennet.ru/base/X/vim_orfo.txt.html)
-if version >= 700
+if version >= 700 && has("spell")
 "   По умолчанию проверка орфографии выключена.
     setlocal spell spelllang=
     setlocal nospell
@@ -110,7 +110,9 @@ if version >= 700
     endfunc
 
     " map spell on/off for English/Russian
-    map <F11> <Esc>:call ChangeSpellLang()<CR>
+    map <F11> <Esc>:call ChangeSpiellLang()<CR>
+    " limit it to just the top 10 items
+    set sps=best,10 
 endif
 " по умолчанию латинская раскладка
 set iminsert=0
