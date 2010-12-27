@@ -12,8 +12,8 @@ if filereadable(vimfiles_dir."autoload/pathogen.vim")
     filetype off
     call pathogen#helptags()
     call pathogen#runtime_append_all_bundles()
-    filetype plugin indent on
 endif
+filetype plugin indent on
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
