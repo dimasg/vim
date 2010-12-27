@@ -1,3 +1,7 @@
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
 if has('win32')
     language messages en
     let vimfiles_dir=expand("$HOME/vimfiles/")
@@ -8,16 +12,12 @@ endif
 
 " from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
+filetype off
 if filereadable(vimfiles_dir."autoload/pathogen.vim")
-    filetype off
     call pathogen#helptags()
     call pathogen#runtime_append_all_bundles()
 endif
 filetype plugin indent on
-
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
 
 " bit prevents some security exploits 
 set modelines=0
