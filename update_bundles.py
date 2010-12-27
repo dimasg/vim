@@ -43,6 +43,7 @@ svn_bundles = [
 ]
 
 vim_org_scripts = [
+    ["zenburn",         "vim", "14110",    "colors"],
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
     ["javascript",      "vim", "10728",    "syntax"],
