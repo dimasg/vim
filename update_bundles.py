@@ -2,12 +2,13 @@
 
 # ruby original from http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
+from dircache   import opendir;
 from os         import chdir, chmod, makedirs, remove, rename, rmdir, system;
 from os.path    import *;
 from re         import match;
 from shutil     import copytree,rmtree;
 from stat       import S_IWRITE;
-from sys        import exit, platform;
+from sys        import argv, exit, platform;
 from urllib2    import urlopen;
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
@@ -70,8 +71,12 @@ if not exists(bundles_dir):
 
 tmp_dir = join( vim_dir, "tmp" )
 local_dir = join( vim_dir, "autoload" )
+local_old_dir = local_dir + '.old'
+if exists( local_old_dir ):
+    print '%(0)s already exists, remove it first!' % { '0' : local_old_dir }
+    exit(2)
 if exists( local_dir ):
-    rename( local_dir, local_dir+'.old' )
+    rename( local_dir, local_old_dir )
 print 'Unpacking pathogen from %(0)s to %(1)s' % { '0' : pathogen_git, '1' : tmp_dir };
 system( 'git clone %(0)s "%(1)s"' % { '0' : pathogen_git, '1' : tmp_dir } )
 copytree( join(tmp_dir,"autoload"), local_dir )
@@ -115,6 +120,25 @@ for name, svn_url in svn_bundles:
     makedirs( local_dir )
     system( 'svn checkout %(0)s "%(1)s"' % { '0' :  svn_url, '1' : local_dir } )
     rmtree( join( local_dir, '.svn' ), onerror=remove_readonly )
+
+local_dir = '';
+
+print argv[0]
+if ( exists(argv[0]) ):
+    local_dir = dirname(argv[0])
+else:
+    local_dir = '.'
+local_dir = join( local_dir, 'local' )
+if ( exists(local_dir) ):
+    local_vim_dir = bundles_dir
+    names = opendir( local_dir )
+    for name in names:
+        from_dir = join(local_dir,name)
+        if ( isdir( from_dir ) ):
+            to_dir = join(local_vim_dir,name)
+            print 'Copying local files from %(0)s to %(1)s' % { '0' : from_dir, '1' : to_dir }
+            copytree( from_dir, to_dir );
+
 
 rmtree( bundles_dir+'.old', onerror=remove_readonly )
 
