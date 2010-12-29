@@ -147,6 +147,7 @@ set noequalalways
 set winheight=999
 
 set incsearch        " do incremental searching
+set ignorecase
 set smartcase
 
 " http://dimio-blog.livejournal.com/16376.html
@@ -276,16 +277,16 @@ set laststatus=2
 
 " tab navigation like firefox
 if version >= 700
-    nmap <C-S-tab> :tabprevious<cr>
-    nmap <C-tab> :tabnext<cr>
-    map <C-S-tab> :tabprevious<cr>
-    map <C-tab> :tabnext<cr>
-    imap <C-S-tab> <ESC>:tabprevious<cr>i
-    imap <C-tab> <ESC>:tabnext<cr>i
-    nmap <C-t> :tabnew<cr>
-    imap <C-t> <ESC>:tabnew<cr>
-    map <C-w> :tabclose<cr>
-    imap <C-w> :tabclose<cr>
+    nmap <C-S-Tab> :tabprevious<cr>
+    nmap <C-Tab> :tabnext<cr>
+    map <C-S-Tab> :tabprevious<cr>
+    map <C-Tab> :tabnext<cr>
+    imap <C-S-Tab> <ESC>:tabprevious<cr>i
+    imap <C-Tab> <ESC>:tabnext<cr>i
+"    nnoremap <C-S-t> :tabnew<cr>
+    inoremap <C-S-t> <ESC>:tabnew<cr>
+"    nnoremap <C-S-w> :tabclose<cr>
+    inoremap <C-S-w> <ESC>:tabclose<cr>
     nmap Z :tabprev<cr>
     nmap X :tabnext<cr>
 endif
