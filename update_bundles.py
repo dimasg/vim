@@ -50,7 +50,10 @@ vim_org_scripts = [
     ["python",          "vim", "12804",    "syntax"],
     ["javascript",      "vim", "10728",    "syntax"],
     ["ScrollColor",     "vim", "5966",     "plugin"],
+    ["sourceexplorer",  "vim", "14003",    "plugin"],
     ["ColorSamplerPack","zip", "12179",    "archive"],
+    ["trinity",         "zip", "11988",    "archive"],
+    ["taglist",         "zip", "7701",     "archive"],
 ]
 
 other_scripts = [
