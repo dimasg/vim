@@ -228,6 +228,9 @@ set fileformats=unix,dos,mac " формат файла по умолчанию (
 " Ловля имени редактируемого файла из vim'а. (^[ вводится как Ctrl+V Esc)
 "set titlestring=%t-dsd
 "set titleold=&titlestring
+" screen:
+"set titlestring=%t
+"set titleold=bash
 let &titlestring = "vim (" . expand("%:t") . ")"
 if &term == "screen"
     set t_ts=k
