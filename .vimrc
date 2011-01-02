@@ -284,15 +284,9 @@ if version >= 700
     imap <C-S-Tab> <ESC>:tabprevious<cr>i
     imap <C-Tab> <ESC>:tabnext<cr>i
 "    nnoremap <C-S-t> :tabnew<cr>
-<<<<<<< HEAD
     inoremap <C-t> <ESC>:tabnew<cr>
 "    nnoremap <C-S-w> :tabclose<cr>
     inoremap <C-w> <ESC>:tabclose<cr>
-=======
-    inoremap <C-S-t> <ESC>:tabnew<cr>
-"    nnoremap <C-S-w> :tabclose<cr>
-    inoremap <C-S-w> <ESC>:tabclose<cr>
->>>>>>> dbfb33c... keymaps
     nmap Z :tabprev<cr>
     nmap X :tabnext<cr>
 endif
