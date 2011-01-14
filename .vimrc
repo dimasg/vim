@@ -286,7 +286,7 @@ if version >= 700
     map <C-Tab> :tabnext<cr>
     imap <C-S-Tab> <ESC>:tabprevious<cr>i
     imap <C-Tab> <ESC>:tabnext<cr>i
-"    nnoremap <C-S-t> :tabnew<cr>
+    nnoremap <C-n> :tabnew<cr>
     inoremap <C-t> <ESC>:tabnew<cr>
 "    nnoremap <C-S-w> :tabclose<cr>
     inoremap <C-w> <ESC>:tabclose<cr>
