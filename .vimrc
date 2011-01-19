@@ -36,9 +36,6 @@ au FocusLost * :wa
 
 " end stevelosh
 
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
 if has("vms")
     set nobackup    " do not keep a backup file, use versions instead
 else
@@ -120,10 +117,12 @@ set iminsert=0
 set imsearch=0
 set tabstop=4
 set shiftwidth=4
-set autoindent
-"set sw=4
+set autoindent smartindent
 set smarttab
 set expandtab
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
 " граница переноса
 set wrapmargin=5
 " подсветим 85ю колонку
