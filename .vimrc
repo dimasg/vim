@@ -29,7 +29,7 @@ if v:version >= 730
     set undofile
 endif
 
-"set formatoptions=qrn1
+set formatoptions=croql
 
 " save all at focus lost
 au FocusLost * :wa
