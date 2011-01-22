@@ -25,7 +25,7 @@ set modelines=0
 set ttyfast
 set gdefault
 
-if v:version >= 730
+if version >= 703
     set undofile
 endif
 
@@ -126,7 +126,7 @@ set backspace=indent,eol,start
 " граница переноса
 set wrapmargin=5
 " подсветим 85ю колонку
-if v:version >= 730
+if version >= 703
     set colorcolumn=85
 endif
 " автоматический перенос после 128 колонки
@@ -134,7 +134,7 @@ set textwidth=128
 " сколько строк повторять при скроллинге
 set scrolloff=4
 " подсветка строки и колонки курсора
-if v:version >= 700
+if version >= 700
     set cursorline
 endif
 "set cursorcolumn
