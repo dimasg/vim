@@ -35,13 +35,14 @@ git_bundles = [
     "git://github.com/tpope/vim-ragtag.git",
     "git://github.com/tpope/vim-surround.git",
     "git://github.com/tsaleh/vim-supertab.git",
+    "git://repo.or.cz/vcscommand",
     "git://github.com/scrooloose/syntastic.git",
     "git://github.com/tsaleh/vim-tcomment.git",
     "git://github.com/mattn/zencoding-vim.git",
 ]
 
 svn_bundles = [
-    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
+#    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
 ]
 
 vim_org_scripts = [
@@ -108,8 +109,10 @@ for url, ext, type in other_scripts:
     local_file.close()
 
 for git_url in git_bundles:
-    git_name = git_url.split('/')[-1].rpartition('.')[0]
-    if git_name == None:
+    git_name = git_url.split('/')[-1]
+    if git_name.find('.') >= 0:
+      git_name = git_name.rpartition('.')[0]
+    if git_name == None or git_name == '':
         print '{0} parsing name error'.format( git_url );
         exit(3)
     local_dir = join( bundles_dir, git_name )
