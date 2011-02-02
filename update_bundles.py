@@ -42,7 +42,7 @@ git_bundles = [
 ]
 
 svn_bundles = [
-#    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
+    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
 ]
 
 vim_org_scripts = [
