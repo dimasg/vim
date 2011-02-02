@@ -35,6 +35,7 @@ git_bundles = [
     "git://github.com/tpope/vim-ragtag.git",
     "git://github.com/tpope/vim-surround.git",
     "git://github.com/tsaleh/vim-supertab.git",
+    "git://repo.or.cz/vcscommand",
     "git://github.com/scrooloose/syntastic.git",
     "git://github.com/tsaleh/vim-tcomment.git",
     "git://github.com/mattn/zencoding-vim.git",
