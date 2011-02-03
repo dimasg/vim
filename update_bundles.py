@@ -109,8 +109,10 @@ for url, ext, type in other_scripts:
     local_file.close()
 
 for git_url in git_bundles:
-    git_name = git_url.split('/')[-1].rpartition('.')[0]
-    if git_name == None:
+    git_name = git_url.split('/')[-1]
+    if git_name.find('.') >= 0:
+      git_name = git_name.rpartition('.')[0]
+    if git_name == None or git_name == '':
         print '{0} parsing name error'.format( git_url );
         exit(3)
     local_dir = join( bundles_dir, git_name )
