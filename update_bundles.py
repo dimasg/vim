@@ -1,35 +1,37 @@
 #!/usr/bin/python
+"""Script for vim plugins update"""
 
-# ruby original from http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
+# ruby original - http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
-from dircache   import opendir;
-from os         import chdir, chmod, makedirs, remove, rename, rmdir, system;
-from os.path    import *;
-from re         import match;
-from shutil     import copytree,rmtree;
-from stat       import S_IWRITE;
-from sys        import argv, exit, platform;
-from urllib2    import urlopen;
+from dircache   import opendir
+from os         import chmod, makedirs, remove, rename, rmdir, system
+from os.path    import dirname, exists, expanduser, isdir, join
+from shutil     import copytree, rmtree
+from stat       import S_IWRITE
+from sys        import argv, platform
+from urllib2    import urlopen
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
-def remove_readonly(fn, path, excinfo):
-    if fn is rmdir:
+def remove_readonly(file_name, path, ):
+    """removed read-only entity"""
+    if file_name is rmdir:
         chmod(path, S_IWRITE)
         rmdir(path)
-    elif fn is remove:
+    elif file_name is remove:
         chmod(path, S_IWRITE)
         remove(path)
 
-pathogen_git = "git://github.com/tpope/vim-pathogen.git";
+PATHOGEN_GIT = "git://github.com/tpope/vim-pathogen.git"
 
-hg_bundles = [
+HG_BUNDLES = [
     "https://bitbucket.org/xuhdev/projecttag",
 ]
 
-git_bundles = [
+GIT_BUNDLES = [
     "git://github.com/hallettj/jslint.vim.git",
 #    "git://github.com/joestelmach/javaScriptLint.vim.git",
     "git://github.com/motemen/git-vim.git",
+    "git://github.com/mbadran/headlights.git",
     "git://github.com/scrooloose/nerdtree.git",
     "git://github.com/scrooloose/nerdcommenter.git",
     "git://github.com/kevinw/pyflakes-vim.git",
@@ -45,15 +47,17 @@ git_bundles = [
     "git://github.com/mattn/zencoding-vim.git",
 ]
 
-svn_bundles = [
+SVN_BUNDLES = [
     [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
 ]
 
-vim_org_scripts = [
+VIM_ORG_SCRIPTS = [
     ["zenburn",         "vim", "14110",    "colors"],
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
+    ["pylint",          "vim", "10365",    "compiler"],
     ["javascript",      "vim", "10728",    "syntax"],
+    ["cctree",          "vim", "15005",    "plugin"],
     ["ScrollColor",     "vim", "5966",     "plugin"],
     ["sourceexplorer",  "vim", "14003",    "plugin"],
     ["ColorSamplerPack","zip", "12179",    "archive"],
@@ -61,11 +65,13 @@ vim_org_scripts = [
     ["taglist",         "zip", "7701",     "archive"],
 ]
 
-other_scripts = [
+OTHER_SCRIPTS = [
 #    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
 #    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
 #    ["http://hlabs.spb.ru/vim/rcs.vim", "vim", "syntax"],
 ]
+
+vim_dir = ''
 
 if platform == 'win32':
     vim_dir = expanduser("~/vimfiles")
@@ -86,19 +92,19 @@ if exists( local_old_dir ):
     exit(2)
 if exists( local_dir ):
     rename( local_dir, local_old_dir )
-print 'Unpacking pathogen from {0} to {1}'.format(pathogen_git,tmp_dir)
-system( 'git clone {0} "{1}"'.format( pathogen_git, tmp_dir ) )
+print 'Unpacking pathogen from {0} to {1}'.format(PATHOGEN_GIT, tmp_dir)
+system( 'git clone {0} "{1}"'.format( PATHOGEN_GIT, tmp_dir ) )
 copytree( join(tmp_dir,"autoload"), local_dir )
 rmtree( tmp_dir, onerror=remove_readonly )
 
-rename( bundles_dir, bundles_dir+'.old' );
+rename( bundles_dir, bundles_dir+'.old' )
 
-for hg_url in hg_bundles:
+for hg_url in HG_BUNDLES:
     hg_name = hg_url.split('/')[-1]
     if hg_name.find('.') >= 0:
-      hg_name = hg_name.rpartition('.')[0]
+        hg_name = hg_name.rpartition('.')[0]
     if hg_name == None or hg_name == '':
-        print '{0} parsing name error'.format( hg_url );
+        print '{0} parsing name error'.format( hg_url )
         exit(3)
     local_dir = join( bundles_dir, hg_name )
     print 'Unpacking {0} to {1}'.format( hg_url, local_dir )
@@ -106,31 +112,31 @@ for hg_url in hg_bundles:
     system( 'hg clone {0} "{1}"'.format( hg_url, local_dir ) )
     rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
 
-for name, ext, id, type in vim_org_scripts:
+for name, ext, id, type in VIM_ORG_SCRIPTS:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading {0} to {1}'.format( name, local_dir )
     makedirs( local_dir )
     url = urlopen( 'http://www.vim.org/scripts/download_script.php?src_id={0}'.format(id) )
-    local_file = open( join(local_dir,'{0}.{1}'.format(name,ext)), 'w' )
+    local_file = open( join(local_dir, '{0}.{1}'.format(name, ext)), 'w' )
     local_file.write( url.read() )
     local_file.close()
 
-for url, ext, type in other_scripts:
+for url, ext, type in OTHER_SCRIPTS:
     name = url.split('/')[-1].rpartition('.')[0]
     local_dir = join( bundles_dir, name, type )
     print 'Downloading {0} to {1}'.format( url, local_dir )
     makedirs( local_dir )
     url = urlopen( url )
-    local_file = open( join(local_dir,'{0}.{1}'.format(name,ext)), 'w' )
+    local_file = open( join(local_dir, '{0}.{1}'.format(name, ext)), 'w' )
     local_file.write( url.read() )
     local_file.close()
 
-for git_url in git_bundles:
+for git_url in GIT_BUNDLES:
     git_name = git_url.split('/')[-1]
     if git_name.find('.') >= 0:
-      git_name = git_name.rpartition('.')[0]
+        git_name = git_name.rpartition('.')[0]
     if git_name == None or git_name == '':
-        print '{0} parsing name error'.format( git_url );
+        print '%(0)s parsing name error' % { '0' : git_url }
         exit(3)
     local_dir = join( bundles_dir, git_name )
     print 'Unpacking {0} to {1}'.format( git_url, local_dir )
@@ -138,14 +144,14 @@ for git_url in git_bundles:
     system( 'git clone {0} "{1}"'.format( git_url, local_dir ) )
     rmtree( join( local_dir, '.git' ), onerror=remove_readonly )
 
-for name, svn_url in svn_bundles:
+for name, svn_url in SVN_BUNDLES:
     local_dir = join( bundles_dir, name )
     print 'Unpacking {0} to {1}'.format( svn_url, local_dir )
     makedirs( local_dir )
     system( 'svn checkout {0} "{1}"'.format( svn_url, local_dir ) )
     rmtree( join( local_dir, '.svn' ), onerror=remove_readonly )
 
-local_dir = '';
+local_dir = ''
 
 print argv[0]
 if ( exists(argv[0]) ):
@@ -155,16 +161,17 @@ else:
 local_dir = join( local_dir, 'local' )
 if ( exists(local_dir) ):
     local_vim_dir = bundles_dir
-    names = opendir( local_dir )
-    for name in names:
-        from_dir = join(local_dir,name)
+    dir_names = opendir( local_dir )
+    for name in dir_names:
+        from_dir = join(local_dir, name)
         if ( isdir( from_dir ) ):
-            to_dir = join(local_vim_dir,name)
+            to_dir = join(local_vim_dir, name)
             print 'Copying local files from {0} to {1}'.format( from_dir, to_dir )
-            copytree( from_dir, to_dir );
+            copytree( from_dir, to_dir )
 
 
 rmtree( bundles_dir+'.old', onerror=remove_readonly )
 
 exit(0)
 
+# vim: set ts=4 sw=4
