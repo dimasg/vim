@@ -55,9 +55,10 @@ VIM_ORG_SCRIPTS = [
     ["zenburn",         "vim", "14110",    "colors"],
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
-    ["pylint",          "vim", "10365",    "compiler"],
     ["javascript",      "vim", "10728",    "syntax"],
+    ["pylint",          "vim", "10365",    "compiler"],
     ["cctree",          "vim", "15005",    "plugin"],
+    ["errormarker",     "vim", "14142",    "plugin"],
     ["ScrollColor",     "vim", "5966",     "plugin"],
     ["sourceexplorer",  "vim", "14003",    "plugin"],
     ["ColorSamplerPack","zip", "12179",    "archive"],
@@ -65,6 +66,7 @@ VIM_ORG_SCRIPTS = [
     ["taglist",         "zip", "7701",     "archive"],
 ]
 
+VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id=%(0)s';
 OTHER_SCRIPTS = [
 #    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
 #    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
@@ -116,7 +118,7 @@ for name, ext, id, type in VIM_ORG_SCRIPTS:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading %(0)s to %(1)s' % { '0' : name, '1' : local_dir }
     makedirs( local_dir )
-    url = urlopen( 'http://www.vim.org/scripts/download_script.php?src_id=%(0)s' % { '0' : id } )
+    url = urlopen( VIM_SRC_URL % { '0' : id } )
     local_file = open( join(local_dir,'%(0)s.%(1)s' % { '0' : name, '1' : ext } ), 'w' )
     local_file.write( url.read() )
     local_file.close()
