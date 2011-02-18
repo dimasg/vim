@@ -22,6 +22,10 @@ def remove_readonly(fn, path, excinfo):
 
 pathogen_git = "git://github.com/tpope/vim-pathogen.git";
 
+hg_bundles = [
+    "https://bitbucket.org/xuhdev/projecttag",
+]
+
 git_bundles = [
     "git://github.com/hallettj/jslint.vim.git",
 #    "git://github.com/joestelmach/javaScriptLint.vim.git",
@@ -88,6 +92,19 @@ copytree( join(tmp_dir,"autoload"), local_dir )
 rmtree( tmp_dir, onerror=remove_readonly )
 
 rename( bundles_dir, bundles_dir+'.old' );
+
+for hg_url in hg_bundles:
+    hg_name = hg_url.split('/')[-1]
+    if hg_name.find('.') >= 0:
+      hg_name = hg_name.rpartition('.')[0]
+    if hg_name == None or hg_name == '':
+        print '{0} parsing name error'.format( hg_url );
+        exit(3)
+    local_dir = join( bundles_dir, hg_name )
+    print 'Unpacking {0} to {1}'.format( hg_url, local_dir )
+    makedirs( local_dir )
+    system( 'hg clone {0} "{1}"'.format( hg_url, local_dir ) )
+    rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
 
 for name, ext, id, type in vim_org_scripts:
     local_dir = join( bundles_dir, name, type )
