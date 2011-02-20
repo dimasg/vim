@@ -57,7 +57,7 @@ VIM_ORG_SCRIPTS = [
     ["python",          "vim", "12804",    "syntax"],
     ["javascript",      "vim", "10728",    "syntax"],
     ["pylint",          "vim", "10365",    "compiler"],
-    ["cctree",          "vim", "15005",    "plugin"],
+    ["cctree",          "vim", "15043",    "plugin"],
     ["errormarker",     "vim", "14142",    "plugin"],
     ["ScrollColor",     "vim", "5966",     "plugin"],
     ["sourceexplorer",  "vim", "14003",    "plugin"],
