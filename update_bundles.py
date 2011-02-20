@@ -53,6 +53,7 @@ SVN_BUNDLES = [
 
 VIM_ORG_SCRIPTS = [
     ["zenburn",         "vim", "14110",    "colors"],
+    ["css3",            "vim", "14047",    "syntax"],
     ["jquery",          "vim", "12276",    "syntax"],
     ["python",          "vim", "12804",    "syntax"],
     ["javascript",      "vim", "10728",    "syntax"],
