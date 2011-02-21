@@ -53,19 +53,19 @@ SVN_BUNDLES = [
 ]
 
 VIM_ORG_SCRIPTS = [
-    ["zenburn",         "vim", "14110",    "colors"],
-    ["css3",            "vim", "14047",    "syntax"],
-    ["jquery",          "vim", "12276",    "syntax"],
-    ["python",          "vim", "12804",    "syntax"],
-    ["javascript",      "vim", "10728",    "syntax"],
-    ["pylint",          "vim", "10365",    "compiler"],
-    ["cctree",          "vim", "15043",    "plugin"],
-    ["errormarker",     "vim", "14142",    "plugin"],
-    ["ScrollColor",     "vim", "5966",     "plugin"],
-    ["sourceexplorer",  "vim", "14003",    "plugin"],
-    ["ColorSamplerPack","zip", "12179",    "archive"],
-    ["trinity",         "zip", "11988",    "archive"],
-    ["taglist",         "zip", "7701",     "archive"],
+    ["zenburn",         "vim", "14110",    "colors",  ""],
+    ["css3",            "vim", "14047",    "syntax",  ""],
+    ["jquery",          "vim", "12276",    "syntax",  ""],
+    ["python",          "vim", "12804",    "syntax",  ""],
+    ["javascript",      "vim", "10728",    "syntax",  ""],
+    ["pylint",          "vim", "10365",    "compiler", ""],
+    ["cctree",          "vim", "15043",    "plugin",  ""],
+    ["errormarker",     "vim", "14142",    "plugin",  ""],
+    ["ScrollColor",     "vim", "5966",     "plugin",  ""],
+    ["sourceexplorer",  "vim", "14003",    "plugin",  ""],
+    ["ColorSamplerPack","zip", "12179",    "archive", ""],
+    ["trinity",         "zip", "11988",    "archive", "extract:plugin"],
+    ["taglist",         "zip", "7701",     "archive", "extract"],
 ]
 
 VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id={0}'
@@ -117,12 +117,22 @@ for hg_url in HG_BUNDLES:
     system( 'hg clone {0} "{1}"'.format( hg_url, local_dir ) )
     rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
 
-for name, ext, id, type in VIM_ORG_SCRIPTS:
+for name, ext, id, type, do_after in VIM_ORG_SCRIPTS:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading {0} to {1}'.format( name, local_dir )
     makedirs( local_dir )
     local_file_name = join(local_dir, '{0}.{1}'.format(name, ext))
     urlretrieve( VIM_SRC_URL.format(id), local_file_name )
+    if type == 'archive' and do_after.find('extract') == 0:
+        if not is_zipfile( local_file_name ):
+            print '{0} is not valid zip file!'.format( local_file_name )
+        else:
+            local_dir = join( bundles_dir, name )
+            if do_after.find(':') >= 0:
+                local_dir = join(local_dir, do_after.split(':')[1])
+            print 'Extracting {0} to {1}'.format( local_file_name, local_dir )
+            file = ZipFile( local_file_name, 'r' )
+            file.extractall( local_dir )
 
 for url, ext, type in OTHER_SCRIPTS:
     name = url.split('/')[-1].rpartition('.')[0]
