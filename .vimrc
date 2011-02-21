@@ -20,7 +20,9 @@ endif
 filetype plugin indent on
 
 " bit prevents some security exploits 
-set modelines=0
+"set modelines=0
+set modeline
+set modelines=1
 
 set ttyfast
 set gdefault
