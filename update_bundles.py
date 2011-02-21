@@ -12,7 +12,7 @@ from sys        import argv, platform
 from urllib2    import urlopen
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
-def remove_readonly(file_name, path, ):
+def remove_readonly(file_name, path, _):
     """removed read-only entity"""
     if file_name is rmdir:
         chmod(path, S_IWRITE)
@@ -66,7 +66,8 @@ VIM_ORG_SCRIPTS = [
     ["taglist",         "zip", "7701",     "archive"],
 ]
 
-VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id=%(0)s';
+VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id=%(0)s'
+
 OTHER_SCRIPTS = [
 #    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
 #    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
