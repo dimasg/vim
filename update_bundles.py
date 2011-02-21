@@ -34,7 +34,7 @@ GIT_BUNDLES = [
     "git://github.com/mbadran/headlights.git",
     "git://github.com/scrooloose/nerdtree.git",
     "git://github.com/scrooloose/nerdcommenter.git",
-    "git://github.com/kevinw/pyflakes-vim.git",
+#    "git://github.com/kevinw/pyflakes-vim.git",
     "git://github.com/msanders/snipmate.vim.git",
     "git://github.com/scrooloose/snipmate-snippets.git",
 #    "git://github.com/tpope/vim-fugitive.git",
