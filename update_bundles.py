@@ -27,12 +27,12 @@ def extractall( zipfile, path ):
     if not exists( path ):
         makedirs( path )
     for fname in zipfile.namelist():
-        local_file_name = join(path, fname)
-        local_file_dir = dirname( local_file_name )
+        local_file_name_ = join(path, fname)
+        local_file_dir = dirname( local_file_name_ )
         if not exists( local_file_dir ):
             makedirs( local_file_dir )
         print 'Extracting %(0)s to %(1)s' % { '0' : fname, '1' : path }
-        local_file = open( local_file_name, 'w' )
+        local_file = open( local_file_name_, 'w' )
         local_file.write( zipfile.read(fname) )
         local_file.close()
 
@@ -64,7 +64,8 @@ GIT_BUNDLES = [
 ]
 
 SVN_BUNDLES = [
-    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
+    [ "rainbow_parenthsis", 
+      "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
 ]
 
 VIM_ORG_SCRIPTS = [
@@ -132,12 +133,12 @@ for hg_url in HG_BUNDLES:
     system( 'hg clone %(0)s "%(1)s"' % { '0' :  hg_url, '1' : local_dir } )
     rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
 
-for name, ext, id, type, do_after in VIM_ORG_SCRIPTS:
-    local_dir = join( bundles_dir, name, type )
+for name, ext, vim_id, plugin_type, do_after in VIM_ORG_SCRIPTS:
+    local_dir = join( bundles_dir, name, plugin_type )
     print 'Downloading %(0)s to %(1)s' % { '0' : name, '1' : local_dir }
     makedirs( local_dir )
     local_file_name = join(local_dir, '%(0)s.%(1)s' % { '0' : name, '1' : ext })
-    urlretrieve( VIM_SRC_URL % { '0' : id }, local_file_name )
+    urlretrieve( VIM_SRC_URL % { '0' : vim_id }, local_file_name )
     if type == 'archive' and do_after.find('extract') == 0:
         if not is_zipfile( local_file_name ):
             print '%(0)s is not valid zip file!' % { '0' : local_file_name }
@@ -146,12 +147,12 @@ for name, ext, id, type, do_after in VIM_ORG_SCRIPTS:
             if do_after.find(':') >= 0:
                 local_dir = join(local_dir, do_after.split(':')[1])
             print 'Extracting %(0)s to %(1)s' % { '0' : local_file_name, '1' : local_dir }
-            file = ZipFile( local_file_name, 'r' )
-            extractall( file, local_dir )
+            zip_file = ZipFile( local_file_name, 'r' )
+            extractall( zip_file, local_dir )
 
-for url, ext, type in OTHER_SCRIPTS:
+for url, ext, plugin_type in OTHER_SCRIPTS:
     name = url.split('/')[-1].rpartition('.')[0]
-    local_dir = join( bundles_dir, name, type )
+    local_dir = join( bundles_dir, name, plugin_type )
     print 'Downloading %(0)s to %(1)s' % { '0' :  url, '1' : local_dir }
     makedirs( local_dir )
     local_file_name = join(local_dir, '%(0)s.%(1)s' % { '0' : name, '1' : ext })
