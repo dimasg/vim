@@ -22,7 +22,7 @@ filetype plugin indent on
 " bit prevents some security exploits 
 "set modelines=0
 set modeline
-set modelines=1
+set modelines=3
 
 set ttyfast
 set gdefault
@@ -311,4 +311,5 @@ if isdirectory(swap_dir)
 endif
 
 " dvg - end
+" vim: ts=4 sw=4
 " end of file
