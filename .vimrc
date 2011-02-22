@@ -143,7 +143,7 @@ endif
 "set cursorcolumn
 set visualbell
 " миннимальная высота окна
-set winminheight=0
+set winminheight=1
 " делать активное окон максимального размера
 set noequalalways
 set winheight=999
@@ -273,6 +273,11 @@ endif
 " сохраняемся по F2
 nmap <F2> <ESC>:w<CR>
 imap <F2> <ESC>:w<CR>i<Right>
+" F6/F7 - предыдущая/следующая ошибка
+nmap <F6> <ESC>:cp<CR>
+imap <F6> <ESC>:cp<CR>
+nmap <F7> <ESC>:cn<CR>
+imap <F7> <ESC>:cn<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
