@@ -9,7 +9,8 @@ from os.path    import dirname, exists, expanduser, isdir, join
 from shutil     import copytree, rmtree
 from stat       import S_IWRITE
 from sys        import argv, platform
-from urllib2    import urlopen
+from urllib     import urlretrieve
+from zipfile    import is_zipfile, ZipFile
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
 def remove_readonly(file_name, path, _):
@@ -120,20 +121,16 @@ for name, ext, id, type in VIM_ORG_SCRIPTS:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading %(0)s to %(1)s' % { '0' : name, '1' : local_dir }
     makedirs( local_dir )
-    url = urlopen( VIM_SRC_URL % { '0' : id } )
-    local_file = open( join(local_dir,'%(0)s.%(1)s' % { '0' : name, '1' : ext } ), 'w' )
-    local_file.write( url.read() )
-    local_file.close()
+    local_file_name = join(local_dir, '%(0)s.%(1)s' % { '0' : name, '1' : ext })
+    urlretrieve( VIM_SRC_URL % { '0' : id }, local_file_name )
 
 for url, ext, type in OTHER_SCRIPTS:
     name = url.split('/')[-1].rpartition('.')[0]
     local_dir = join( bundles_dir, name, type )
     print 'Downloading %(0)s to %(1)s' % { '0' :  url, '1' : local_dir }
     makedirs( local_dir )
-    url = urlopen( url )
-    local_file = open( join(local_dir,'%(0)s.%(1)s' % { '0' : name, '1' : ext } ), 'w' )
-    local_file.write( url.read() )
-    local_file.close()
+    local_file_name = join(local_dir, '%(0)s.%(1)s' % { '0' : name, '1' : ext })
+    urlretrieve( url, local_file_name )
 
 for git_url in GIT_BUNDLES:
     git_name = git_url.split('/')[-1]
