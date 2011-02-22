@@ -22,6 +22,20 @@ def remove_readonly(file_name, path, _):
         chmod(path, S_IWRITE)
         remove(path)
 
+def extractall( zipfile, path ):
+    """extracted all from zipfile"""
+    if not exists( path ):
+        makedirs( path )
+    for fname in zipfile.namelist():
+        local_file_name = join(path, fname)
+        local_file_dir = dirname( local_file_name )
+        if not exists( local_file_dir ):
+            makedirs( local_file_dir )
+        print 'Extracting %(0)s to %(1)s' % { '0' : fname, '1' : path }
+        local_file = open( local_file_name, 'w' )
+        local_file.write( zipfile.read(fname) )
+        local_file.close()
+
 PATHOGEN_GIT = "git://github.com/tpope/vim-pathogen.git"
 
 HG_BUNDLES = [
@@ -53,19 +67,19 @@ SVN_BUNDLES = [
 ]
 
 VIM_ORG_SCRIPTS = [
-    ["zenburn",         "vim", "14110",    "colors"],
-    ["css3",            "vim", "14047",    "syntax"],
-    ["jquery",          "vim", "12276",    "syntax"],
-    ["python",          "vim", "12804",    "syntax"],
-    ["javascript",      "vim", "10728",    "syntax"],
-    ["pylint",          "vim", "10365",    "compiler"],
-    ["cctree",          "vim", "15043",    "plugin"],
-    ["errormarker",     "vim", "14142",    "plugin"],
-    ["ScrollColor",     "vim", "5966",     "plugin"],
-    ["sourceexplorer",  "vim", "14003",    "plugin"],
-    ["ColorSamplerPack","zip", "12179",    "archive"],
-    ["trinity",         "zip", "11988",    "archive"],
-    ["taglist",         "zip", "7701",     "archive"],
+    ["zenburn",         "vim", "14110",    "colors",  ""],
+    ["css3",            "vim", "14047",    "syntax",  ""],
+    ["jquery",          "vim", "12276",    "syntax",  ""],
+    ["python",          "vim", "12804",    "syntax",  ""],
+    ["javascript",      "vim", "10728",    "syntax",  ""],
+    ["pylint",          "vim", "10365",    "compiler", ""],
+    ["cctree",          "vim", "15043",    "plugin",  ""],
+    ["errormarker",     "vim", "14142",    "plugin",  ""],
+    ["ScrollColor",     "vim", "5966",     "plugin",  ""],
+    ["sourceexplorer",  "vim", "14003",    "plugin",  ""],
+    ["ColorSamplerPack","zip", "12179",    "archive", ""],
+    ["trinity",         "zip", "11988",    "archive", "extract:plugin"],
+    ["taglist",         "zip", "7701",     "archive", "extract"],
 ]
 
 VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id=%(0)s'
@@ -117,12 +131,22 @@ for hg_url in HG_BUNDLES:
     system( 'hg clone %(0)s "%(1)s"' % { '0' :  hg_url, '1' : local_dir } )
     rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
 
-for name, ext, id, type in VIM_ORG_SCRIPTS:
+for name, ext, id, type, do_after in VIM_ORG_SCRIPTS:
     local_dir = join( bundles_dir, name, type )
     print 'Downloading %(0)s to %(1)s' % { '0' : name, '1' : local_dir }
     makedirs( local_dir )
     local_file_name = join(local_dir, '%(0)s.%(1)s' % { '0' : name, '1' : ext })
     urlretrieve( VIM_SRC_URL % { '0' : id }, local_file_name )
+    if type == 'archive' and do_after.find('extract') == 0:
+        if not is_zipfile( local_file_name ):
+            print '%(0)s is not valid zip file!' % { '0' : local_file_name }
+        else:
+            local_dir = join( bundles_dir, name )
+            if do_after.find(':') >= 0:
+                local_dir = join(local_dir, do_after.split(':')[1])
+            print 'Extracting %(0)s to %(1)s' % { '0' : local_file_name, '1' : local_dir }
+            file = ZipFile( local_file_name, 'r' )
+            extractall( file, local_dir )
 
 for url, ext, type in OTHER_SCRIPTS:
     name = url.split('/')[-1].rpartition('.')[0]
