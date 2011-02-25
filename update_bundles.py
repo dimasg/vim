@@ -25,6 +25,7 @@ def remove_readonly(file_name, path, _):
 PATHOGEN_GIT = "git://github.com/tpope/vim-pathogen.git"
 
 HG_BUNDLES = [
+    "http://bitbucket.org/sjl/gundo.vim",
     "https://bitbucket.org/xuhdev/projecttag",
 ]
 
