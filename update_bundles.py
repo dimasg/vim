@@ -3,10 +3,11 @@
 
 # ruby original - http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
+from config     import Config
 from dircache   import opendir
-from os         import chmod, makedirs, remove, rename, rmdir, system
+from os         import chmod, listdir, makedirs, remove, rename, rmdir, system
 from os.path    import dirname, exists, expanduser, isdir, join
-from shutil     import copytree, rmtree
+from shutil     import copy, copytree, rmtree
 from stat       import S_IWRITE
 from sys        import argv, platform
 from urllib     import urlretrieve
@@ -22,169 +23,130 @@ def remove_readonly(file_name, path, _):
         chmod(path, S_IWRITE)
         remove(path)
 
-PATHOGEN_GIT = "git://github.com/tpope/vim-pathogen.git"
 
-HG_BUNDLES = [
-    "http://bitbucket.org/sjl/gundo.vim",
-    "https://bitbucket.org/xuhdev/projecttag",
-]
+def backup_dir(dir_name, backup_dir_name):
+    """ backup dir """
+    if exists(backup_dir_name):
+        print '{0} already exists, remove it first!'.format(backup_dir_name)
+        exit(2)
+    if exists(dir_name):
+        rename(dir_name, backup_dir_name)
 
-GIT_BUNDLES = [
-    "git://github.com/hallettj/jslint.vim.git",
-#    "git://github.com/joestelmach/javaScriptLint.vim.git",
-    "git://github.com/motemen/git-vim.git",
-    "git://github.com/mbadran/headlights.git",
-    "git://github.com/scrooloose/nerdtree.git",
-    "git://github.com/scrooloose/nerdcommenter.git",
-#    "git://github.com/kevinw/pyflakes-vim.git",
-    "git://github.com/dimasg/pylint.git",
-    "git://github.com/msanders/snipmate.vim.git",
-    "git://github.com/scrooloose/snipmate-snippets.git",
-#    "git://github.com/tpope/vim-fugitive.git",
-    "git://github.com/tpope/vim-ragtag.git",
-    "git://github.com/tpope/vim-surround.git",
-    "git://github.com/tsaleh/vim-supertab.git",
-    "git://repo.or.cz/vcscommand",
-    "git://github.com/scrooloose/syntastic.git",
-    "git://github.com/tsaleh/vim-tcomment.git",
-    "git://github.com/mattn/zencoding-vim.git",
-]
-
-SVN_BUNDLES = [
-    [ "rainbow_parenthsis", "http://vim-scripts.googlecode.com/svn/trunk/1561%20Rainbow%20Parenthsis%20Bundle/" ],
-]
-
-VIM_ORG_SCRIPTS = [
-    ["zenburn",         "vim", "14110",    "colors",  ""],
-    ["css3",            "vim", "14047",    "syntax",  ""],
-    ["jquery",          "vim", "12276",    "syntax",  ""],
-    ["python",          "vim", "12804",    "syntax",  ""],
-    ["javascript",      "vim", "10728",    "syntax",  ""],
-#    ["pylint",          "vim", "10365",    "compiler", ""],
-    ["cctree",          "vim", "15043",    "plugin",  ""],
-    ["errormarker",     "vim", "14142",    "plugin",  ""],
-    ["ScrollColor",     "vim", "5966",     "plugin",  ""],
-    ["sourceexplorer",  "vim", "14003",    "plugin",  ""],
-    ["ColorSamplerPack","zip", "12179",    "archive", ""],
-    ["trinity",         "zip", "11988",    "archive", "extract:plugin"],
-    ["taglist",         "zip", "7701",     "archive", "extract"],
-]
-
-VIM_SRC_URL = 'http://www.vim.org/scripts/download_script.php?src_id={0}'
-
-OTHER_SCRIPTS = [
-#    ["http://hlabs.spb.ru/vim/svn.vim", "vim", "syntax"],
-#    ["http://hlabs.spb.ru/vim/bzr.vim", "vim", "syntax"],
-#    ["http://hlabs.spb.ru/vim/rcs.vim", "vim", "syntax"],
-]
-
-vim_dir = ''
-
-if platform == 'win32':
-    vim_dir = expanduser("~/vimfiles")
-else:
-    vim_dir = expanduser("~/.vim")
-
-bundles_dir = join( vim_dir, "bundle" )
-
-if not exists(bundles_dir):
-    print '{0} does not exists!'.format(bundles_dir)
-    exit(2)
-
-tmp_dir = join( vim_dir, "tmp" )
-local_dir = join( vim_dir, "autoload" )
-local_old_dir = local_dir + '.old'
-if exists( local_old_dir ):
-    print '{0} already exists, remove it first!'.format( local_old_dir )
-    exit(2)
-if exists( local_dir ):
-    rename( local_dir, local_old_dir )
-print 'Unpacking pathogen from {0} to {1}'.format(PATHOGEN_GIT, tmp_dir)
-system( 'git clone {0} "{1}"'.format( PATHOGEN_GIT, tmp_dir ) )
-copytree( join(tmp_dir,"autoload"), local_dir )
-rmtree( tmp_dir, onerror=remove_readonly )
-
-rename( bundles_dir, bundles_dir+'.old' )
-
-for hg_url in HG_BUNDLES:
-    hg_name = hg_url.split('/')[-1]
-    if hg_name.find('.') >= 0:
-        hg_name = hg_name.rpartition('.')[0]
-    if hg_name == None or hg_name == '':
-        print '{0} parsing name error'.format( hg_url )
-        exit(3)
-    local_dir = join( bundles_dir, hg_name )
-    print 'Unpacking {0} to {1}'.format( hg_url, local_dir )
-    makedirs( local_dir )
-    system( 'hg clone {0} "{1}"'.format( hg_url, local_dir ) )
-    rmtree( join( local_dir, '.hg' ), onerror=remove_readonly )
-
-for name, ext, id, type, do_after in VIM_ORG_SCRIPTS:
-    local_dir = join( bundles_dir, name, type )
-    print 'Downloading {0} to {1}'.format( name, local_dir )
-    makedirs( local_dir )
-    local_file_name = join(local_dir, '{0}.{1}'.format(name, ext))
-    urlretrieve( VIM_SRC_URL.format(id), local_file_name )
-    if type == 'archive' and do_after.find('extract') == 0:
-        if not is_zipfile( local_file_name ):
-            print '{0} is not valid zip file!'.format( local_file_name )
+def get_plugin(plugin, getter, to_dir):
+    """ load plugin to to_dir via getter """
+    if 'url' in getter:
+        if 'no_sub_dirs' in plugin:
+            local_dir = to_dir
         else:
-            local_dir = join( bundles_dir, name )
-            if do_after.find(':') >= 0:
-                local_dir = join(local_dir, do_after.split(':')[1])
-            print 'Extracting {0} to {1}'.format( local_file_name, local_dir )
-            file = ZipFile( local_file_name, 'r' )
-            file.extractall( local_dir )
+            to_dir = join(to_dir, plugin.name)
+            local_dir = join(to_dir, plugin.type)
+            makedirs(local_dir)
+        local_file_name = join(
+            local_dir, 
+            '{0}.{1}'.format(plugin.name, plugin.ext)
+        )
+        print 'Downloading {0} to {1}'.format(plugin.name, local_dir)
+        urlretrieve( getter.url.format(plugin.url), local_file_name )
 
-for url, ext, type in OTHER_SCRIPTS:
-    name = url.split('/')[-1].rpartition('.')[0]
-    local_dir = join( bundles_dir, name, type )
-    print 'Downloading {0} to {1}'.format( url, local_dir )
-    makedirs( local_dir )
-    local_file_name = join(local_dir, '{0}.{1}'.format(name, ext))
-    urlretrieve( url, local_file_name )
+        if 'extract' in plugin:
+            if not is_zipfile(local_file_name):
+                print '{0} is not valid zip file!'.format(local_file_name)
+            else:
+                local_dir = to_dir
+                if plugin.extract != '':
+                    local_dir = join(local_dir, plugin.extract)
+                print 'Extracting {0} to {1}'.format(local_file_name, local_dir)
+                zip_file = ZipFile(local_file_name, 'r')
+                zip_file.extractall(local_dir)
 
-for git_url in GIT_BUNDLES:
-    git_name = git_url.split('/')[-1]
-    if git_name.find('.') >= 0:
-        git_name = git_name.rpartition('.')[0]
-    if git_name == None or git_name == '':
-        print '%(0)s parsing name error' % { '0' : git_url }
-        exit(3)
-    local_dir = join( bundles_dir, git_name )
-    print 'Unpacking {0} to {1}'.format( git_url, local_dir )
-    makedirs( local_dir )
-    system( 'git clone {0} "{1}"'.format( git_url, local_dir ) )
-    rmtree( join( local_dir, '.git' ), onerror=remove_readonly )
-
-for name, svn_url in SVN_BUNDLES:
-    local_dir = join( bundles_dir, name )
-    print 'Unpacking {0} to {1}'.format( svn_url, local_dir )
-    makedirs( local_dir )
-    system( 'svn checkout {0} "{1}"'.format( svn_url, local_dir ) )
-    rmtree( join( local_dir, '.svn' ), onerror=remove_readonly )
-
-local_dir = ''
-
-print argv[0]
-if ( exists(argv[0]) ):
-    local_dir = dirname(argv[0])
-else:
-    local_dir = '.'
-local_dir = join( local_dir, 'local' )
-if ( exists(local_dir) ):
-    local_vim_dir = bundles_dir
-    dir_names = opendir( local_dir )
-    for name in dir_names:
-        from_dir = join(local_dir, name)
-        if ( isdir( from_dir ) ):
-            to_dir = join(local_vim_dir, name)
-            print 'Copying local files from {0} to {1}'.format( from_dir, to_dir )
-            copytree( from_dir, to_dir )
+    elif 'run' in getter:
+        next_name = plugin.url.split('/')[-1]
+        if next_name.find('.') >= 0:
+            next_name = next_name.rpartition('.')[0]
+        if next_name == None or next_name == '':
+            print '{0} parsing name error'.format(plugin.url)
+            exit(4)
+        if 'no_sub_dirs' not in plugin:
+            to_dir = join(to_dir, next_name)
+            makedirs(to_dir)
+        print 'Unpacking {0} to {1}'.format(plugin.url, to_dir)
+        system( getter.run.format(plugin.url, to_dir) )
+        if 'remove_dir' in getter :
+            rmtree( join(to_dir, getter.remove_dir), onerror=remove_readonly )
+        if 'no_sub_dirs' in plugin:
+            dest_dir = join(to_dir, plugin.dest)
+            if exists(dest_dir):
+                for file_name in listdir(dest_dir):
+                    copy( join(dest_dir, file_name), to_dir )
+                rmtree(dest_dir)
+    else:
+        print 'Unknown getter type: {0}'.format(getter.type)
 
 
-rmtree( bundles_dir+'.old', onerror=remove_readonly )
+def get_vim_plugins():
+    """load all vim plugins"""
+    vim_dir = ''
 
-exit(0)
+    if platform == 'win32':
+        vim_dir = expanduser("~/vimfiles")
+    else:
+        vim_dir = expanduser("~/.vim")
+
+    cfg_file = file('plugins.cfg')
+    config = Config(cfg_file)
+
+    backup_set = set()
+
+    for next_plugin in config.plugins:
+        next_dir = join(vim_dir, next_plugin.dest+config.new_dir_pfx)
+        if next_plugin.dest not in backup_set:
+            if exists(next_dir):
+                print '{0} already exists, remove it first!'.format(next_dir)
+                exit(2)
+            makedirs(next_dir)
+            backup_set.add(next_plugin.dest)
+        for next_getter in config.gets:
+            if next_getter.type == next_plugin.get_type:
+                get_plugin(next_plugin, next_getter, next_dir)
+                break
+        else:
+            print 'Unknown plugin get type: {0}'.format(next_plugin.get_type)
+            exit(3)
+
+    copy_local_plugins( join(vim_dir, 'bundle'+config.new_dir_pfx) )
+
+    while len(backup_set) > 0:
+        next_dir = join(vim_dir, backup_set.pop())
+        next_old_dir = next_dir+config.old_dir_pfx
+        if exists(next_old_dir):
+            rmtree(next_old_dir, onerror=remove_readonly)
+        if exists(next_dir):
+            rename(next_dir, next_old_dir)
+        next_new_dir = next_dir+config.new_dir_pfx
+        if exists(next_new_dir):
+            rename(next_new_dir, next_dir)
+
+
+def copy_local_plugins( bundles_dir ):
+    """ copied local plugins """
+    if ( exists(argv[0]) ):
+        local_dir = dirname(argv[0])
+    else:
+        local_dir = '.'
+    local_dir = join(local_dir, 'local')
+    if ( exists(local_dir) ):
+        local_vim_dir = bundles_dir
+        dir_names = opendir(local_dir)
+        for name in dir_names:
+            from_dir = join(local_dir, name)
+            if ( isdir(from_dir) ):
+                to_dir = join(local_vim_dir, name)
+                print 'Copying local files from {0} to {1}'.format(from_dir, to_dir)
+                copytree(from_dir, to_dir)
+
+
+if __name__ == "__main__":
+    get_vim_plugins()
+    exit(0)
 
 # vim: ts=4 sw=4
