@@ -38,10 +38,13 @@ def extractall(zipfile, path):
         local_file.close()
 
 def format(format_string, *args):
+    """ loose equivalent str.format """
     params_count = 0
     params_set = {}
     for param in args:
-        format_string = format_string.replace( '{'+str(params_count)+'}', '%('+str(params_count)+')s' )
+        format_string = format_string.replace( 
+                '{'+str(params_count)+'}', '%('+str(params_count)+')s' 
+        )
         params_set[str(params_count)] = param
         params_count = params_count+1
 
@@ -55,53 +58,60 @@ def backup_dir(dir_name, backup_dir_name):
     if exists(dir_name):
         rename(dir_name, backup_dir_name)
 
+def get_url_plugin(plugin, getter, to_dir):
+    """ load 'url' plugin """
+    if 'no_sub_dirs' in plugin:
+        local_dir = to_dir
+    else:
+        to_dir = join(to_dir, plugin.name)
+        local_dir = join(to_dir, plugin.type)
+        makedirs(local_dir)
+    local_file_name = join(
+        local_dir, 
+        format('{0}.{1}', plugin.name, plugin.ext)
+    )
+    print format('Downloading {0} to {1}', plugin.name, local_dir)
+    urlretrieve( format(getter.url, plugin.url), local_file_name )
+
+    if 'extract' in plugin:
+        if not is_zipfile(local_file_name):
+            print format('{0} is not valid zip file!', local_file_name)
+        else:
+            local_dir = to_dir
+            if plugin.extract != '':
+                local_dir = join(local_dir, plugin.extract)
+            print format('Extracting {0} to {1}', local_file_name, local_dir)
+            zip_file = ZipFile(local_file_name, 'r')
+            extractall(zip_file, local_dir)
+
+def get_run_plugin(plugin, getter, to_dir):
+    """ load 'run' plugin """
+    next_name = plugin.url.split('/')[-1]
+    if next_name.find('.') >= 0:
+        next_name = next_name.rpartition('.')[0]
+    if next_name == None or next_name == '':
+        print format('{0} parsing name error', plugin.url)
+        exit(4)
+    if 'no_sub_dirs' not in plugin:
+        to_dir = join(to_dir, next_name)
+        makedirs(to_dir)
+    print format('Unpacking {0} to {1}', plugin.url, to_dir)
+    system( format(getter.run, plugin.url, to_dir) )
+    if 'remove_dir' in getter :
+        rmtree( join(to_dir, getter.remove_dir), onerror=remove_readonly )
+    if 'no_sub_dirs' in plugin:
+        dest_dir = join(to_dir, plugin.dest)
+        if exists(dest_dir):
+            for file_name in listdir(dest_dir):
+                copy( join(dest_dir, file_name), to_dir )
+            rmtree(dest_dir)
+
 def get_plugin(plugin, getter, to_dir):
     """ load plugin to to_dir via getter """
     if 'url' in getter:
-        if 'no_sub_dirs' in plugin:
-            local_dir = to_dir
-        else:
-            to_dir = join(to_dir, plugin.name)
-            local_dir = join(to_dir, plugin.type)
-            makedirs(local_dir)
-        local_file_name = join(
-            local_dir, 
-            format('{0}.{1}', plugin.name, plugin.ext)
-        )
-        print format('Downloading {0} to {1}', plugin.name, local_dir)
-        urlretrieve( format(getter.url, plugin.url), local_file_name )
-
-        if 'extract' in plugin:
-            if not is_zipfile(local_file_name):
-                print format('{0} is not valid zip file!', local_file_name)
-            else:
-                local_dir = to_dir
-                if plugin.extract != '':
-                    local_dir = join(local_dir, plugin.extract)
-                print format('Extracting {0} to {1}', local_file_name, local_dir)
-                zip_file = ZipFile(local_file_name, 'r')
-                extractall(zip_file, local_dir)
-
+        get_url_plugin(plugin, getter, to_dir)
     elif 'run' in getter:
-        next_name = plugin.url.split('/')[-1]
-        if next_name.find('.') >= 0:
-            next_name = next_name.rpartition('.')[0]
-        if next_name == None or next_name == '':
-            print format('{0} parsing name error', plugin.url)
-            exit(4)
-        if 'no_sub_dirs' not in plugin:
-            to_dir = join(to_dir, next_name)
-            makedirs(to_dir)
-        print format('Unpacking {0} to {1}', plugin.url, to_dir)
-        system( format(getter.run, plugin.url, to_dir) )
-        if 'remove_dir' in getter :
-            rmtree( join(to_dir, getter.remove_dir), onerror=remove_readonly )
-        if 'no_sub_dirs' in plugin:
-            dest_dir = join(to_dir, plugin.dest)
-            if exists(dest_dir):
-                for file_name in listdir(dest_dir):
-                    copy( join(dest_dir, file_name), to_dir )
-                rmtree(dest_dir)
+        get_run_plugin(plugin, getter, to_dir)
     else:
         print format('Unknown getter type: {0}', getter.type)
 
