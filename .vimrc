@@ -190,13 +190,16 @@ endif
 "set pastetoggle=
 
 "Настройки сворачивания блоков кода (фолдинг)
-"set foldenable " включить фолдинг
-"set foldmethod=syntax " определять блоки на основе синтаксиса файла
-"set foldcolumn=3 " показать полосу для управления сворачиванием
-"set foldlevel=1 " Первый уровень вложенности открыт, остальные закрыты
-"let perl_folding=1 " правильное сворачивание классов и функций Perl
+set foldenable " включить фолдинг
+set foldmethod=syntax " определять блоки на основе синтаксиса файла
+set foldcolumn=3 " показать полосу для управления сворачиванием
+set foldlevel=7 " Первый уровень вложенности открыт, остальные закрыты
+let perl_folding=1 " правильное сворачивание классов и функций Perl
 "let php_folding=1 " правильное сворачивание классов и функций PHP
 "set foldopen=all " автоматическое открытие сверток при заходе в них
+
+nnoremap    -   zc
+nnoremap    +   zo
 
 " Для указанных типов файлов отключает замену табов пробелами и меняет ширину отступа
 au FileType crontab,fstab,make set noexpandtab tabstop=8 shiftwidth=8
