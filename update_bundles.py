@@ -94,6 +94,8 @@ def get_run_plugin(plugin, getter, to_dir):
         exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = join(to_dir, next_name)
+        if 'type' in plugin:
+            to_dir = join(to_dir, plugin.type)
         makedirs(to_dir)
     print format('Unpacking {0} to {1}', plugin.url, to_dir)
     system( format(getter.run, plugin.url, to_dir) )
