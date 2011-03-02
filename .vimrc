@@ -53,7 +53,7 @@ map Q gq
 set number
 "set relativenumber
 
-if has('win32') || has("gui_running")
+if has('win32') || has('gui')
     set t_Co=256    " использовать больше цветов в терминале
 endif
 if &t_Co > 2
@@ -61,7 +61,7 @@ if &t_Co > 2
     set hlsearch
 endif
 
-if filereadable(vimfiles_dir."bundle/robokai/colors/robokai.vim")
+if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
     colorscheme robokai
     highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040          
     if &term == "xterm"
@@ -72,24 +72,22 @@ if filereadable(vimfiles_dir."bundle/robokai/colors/robokai.vim")
     " from darkblue
     hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
     hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
-elseif
-    if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
-        colorscheme darkblue
-        " немного "доведем до ума" схему
-        if has('gui')
-            highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
-        else
-            if !has('win32')
-                if &term == "xterm"
-                    highlight StatusLine ctermfg=blue term=bold
-                else
-                    highlight StatusLine ctermfg=black term=bold
-                endif
+elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
+    colorscheme darkblue
+    " немного "доведем до ума" схему
+    if has('gui')
+        highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+    else
+        if !has('win32')
+            if &term == "xterm"
+                highlight StatusLine ctermfg=blue term=bold
+            else
+                highlight StatusLine ctermfg=black term=bold
             endif
-            highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
         endif
-        highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
+        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
     endif
+    highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
 endif
 
 " Показываем табы в начале строки точками
