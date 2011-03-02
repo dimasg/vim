@@ -60,24 +60,37 @@ if &t_Co > 2
     syntax enable
     set hlsearch
 endif
-if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
-    colorscheme darkblue
-    " немного "доведем до ума" схему
-    if has('gui')
-        highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+
+if filereadable(vimfiles_dir."bundle/robokai/colors/robokai.vim")
+    colorscheme robokai
+    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040          
+    if &term == "xterm"
+        highlight StatusLine ctermfg=black ctermbg=white term=bold
     else
-        if !has('win32')
-            if &term == "xterm"
-                highlight StatusLine ctermfg=blue term=bold
-            else
-                highlight StatusLine ctermfg=black term=bold
-            endif
-        endif
-        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
+        highlight StatusLine ctermfg=black term=bold
     endif
-    highlight lCursor ctermfg=yellow ctermbg=red guifg=NONE guibg=cyan
+    " from darkblue
+    hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
+    hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+elseif
+    if filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
+        colorscheme darkblue
+        " немного "доведем до ума" схему
+        if has('gui')
+            highlight StatusLine ctermfg=black ctermbg=blue term=bold guifg=darkblue guibg=darkgrey gui=bold
+        else
+            if !has('win32')
+                if &term == "xterm"
+                    highlight StatusLine ctermfg=blue term=bold
+                else
+                    highlight StatusLine ctermfg=black term=bold
+                endif
+            endif
+            highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
+        endif
+        highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
+    endif
 endif
-set title
 
 " Показываем табы в начале строки точками
 "set listchars=tab:··i
@@ -229,6 +242,7 @@ set fileencodings=utf-8,cp1251,koi8-r,cp866
 set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
 
 " Ловля имени редактируемого файла из vim'а. (^[ вводится как Ctrl+V Esc)
+set title
 "set titlestring=%t-dsd
 "set titleold=&titlestring
 " screen:
