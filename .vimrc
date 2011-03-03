@@ -44,7 +44,7 @@ if has("vms")
 else
     set backup      " keep a backup file
 endif
-set history=50      " keep 50 lines of command line history
+set history=250     " keep 250 lines of command line history
 set ruler           " show the cursor position all the time
 
 " Don't use Ex mode, use Q for formatting
