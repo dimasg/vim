@@ -327,7 +327,7 @@ if !isdirectory(swap_dir) && exists('*mkdir')
 endif
 
 if isdirectory(swap_dir)
-    let &dir=swap_dir
+    let &directory=swap_dir.'/'
 endif
 
 " dvg - end
