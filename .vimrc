@@ -44,7 +44,7 @@ if has("vms")
 else
     set backup      " keep a backup file
 endif
-set history=50      " keep 50 lines of command line history
+set history=250     " keep 250 lines of command line history
 set ruler           " show the cursor position all the time
 
 " Don't use Ex mode, use Q for formatting
@@ -327,7 +327,7 @@ if !isdirectory(swap_dir) && exists('*mkdir')
 endif
 
 if isdirectory(swap_dir)
-    let &dir=swap_dir
+    let &directory=swap_dir.'/'
 endif
 
 " dvg - end
