@@ -194,9 +194,10 @@ function! LastPosition()
 endfunction
     
 if version >= 700
-    set sessionoptions=curdir,buffers,tabpages " опции сессий - перейти в текущию директорию, использовать буферы и табы
+    " опции сессий - перейти в текущию директорию, использовать буферы и табы
+    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize 
 else
-    set sessionoptions=curdir,buffers
+    set sessionoptions=curdir,buffers,help,options,resize,slash,winpos,winsize
 endif
 
 " При вставке фрагмента сохраняет отступы
