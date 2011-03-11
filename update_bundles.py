@@ -72,6 +72,8 @@ def get_run_plugin(plugin, getter, to_dir):
         exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = os.path.join(to_dir, next_name)
+        if 'type' in plugin:
+            to_dir = join(to_dir, plugin.type)
         os.makedirs(to_dir)
     print 'Unpacking {0} to {1}'.format(plugin.url, to_dir)
     os.system(getter.run.format(plugin.url, to_dir))
