@@ -72,6 +72,10 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     " from darkblue
     hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
     hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+    "
+    highlight Class ctermfg=DarkYellow
+    highlight LocalVariable ctermfg=DarkGrey
+    
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
     colorscheme lucius
 elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
@@ -183,6 +187,7 @@ autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 
 " Прыгать на последнюю позицию при открытии буфера
 autocmd! BufReadPost * call LastPosition()
+autocmd! BufReadPost * call UpdateFileInfo()
 "
 function! LastPosition()
     " не меняем позицию при коммите 
@@ -192,7 +197,13 @@ function! LastPosition()
         endif
     endif
 endfunction
-    
+
+function! UpdateFileInfo()
+    if exists("g:loaded_ctags_highlighting")
+        UpdateTypesFile
+    endif
+endfunction
+
 if version >= 700
     " опции сессий - перейти в текущию директорию, использовать буферы и табы
     set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize 
@@ -296,7 +307,23 @@ imap <F7> <ESC>:cn<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
-set statusline=%f\ %L%y%r\ [%{&ff}][%{&fenc}]\ %=%m\ %-15(0x%02B\ (%b)%)%-15(%l,%c%V%)%P
+function! SyntaxItem()
+    return synIDattr(synID(line("."),col("."),1),"name")
+endfunction
+
+if has('statusline')
+    set statusline=%f\                  " filename
+    set statusline+=%L                  " lines in buffer
+    set statusline+=%y                  " type of file 
+    set statusline+=%r\                 " read-only flag
+    set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
+    set statusline+=[%{&fenc}]\         " file encoding
+    set statusline+=%{SyntaxItem()}     " syntax item
+    set statusline+=%=%m\               " modified flag
+    set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
+    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column 
+    set statusline+=%P                  " percentage
+endif
 " %{GitBranch()}\ 
 set laststatus=2
 
