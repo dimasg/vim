@@ -72,6 +72,8 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     " from darkblue
     hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
     hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
+    colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
     colorscheme lucius
 elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
