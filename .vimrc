@@ -76,6 +76,8 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
     
+elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
+    colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
     colorscheme lucius
 elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
