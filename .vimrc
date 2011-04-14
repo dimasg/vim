@@ -252,7 +252,16 @@ set lazyredraw
 
 "set encoding=cp1251
 "set termencoding=utf-8
-set fileencodings=utf-8,cp1251,koi8-r,cp866
+if has("multi_byte")
+    if &termencoding == ""
+        let &termencoding = &encoding
+    endif
+    set encoding=utf-8
+    setglobal fileencoding=utf-8 bomb
+    set fileencodings=utf-8,cp1251,koi8-r,latin1
+else
+    set fileencodings=cp1251,koi8-r,cp866
+endif
 set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
 
 " Ловля имени редактируемого файла из vim'а. (^[ вводится как Ctrl+V Esc)
