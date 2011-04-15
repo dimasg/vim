@@ -76,6 +76,8 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
     
+elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
+    colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
     colorscheme lucius
 elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
@@ -253,7 +255,16 @@ set lazyredraw
 
 "set encoding=cp1251
 "set termencoding=utf-8
-set fileencodings=utf-8,cp1251,koi8-r,cp866
+if has("multi_byte")
+    if &termencoding == ""
+        let &termencoding = &encoding
+    endif
+    set encoding=utf-8
+    setglobal fileencoding=utf-8 bomb
+    set fileencodings=utf-8,cp1251,koi8-r,latin1
+else
+    set fileencodings=cp1251,koi8-r,cp866
+endif
 set fileformats=unix,dos,mac " формат файла по умолчанию (влияет на окончания строк) - будет перебираться в указанном порядке
 
 " Ловля имени редактируемого файла из vim'а. (^[ вводится как Ctrl+V Esc)
