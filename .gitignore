@@ -2,3 +2,5 @@
 *.pyc
 Session.vim
 session.vim
+tags
+types_py.vim
