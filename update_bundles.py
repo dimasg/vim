@@ -100,6 +100,21 @@ def get_plugin(plugin, getter, to_dir):
         print 'Unknown getter type: {0}'.format(getter.type)
 
 
+def remove_backup(vim_dir, conf, backup_set):
+    """remove backup set"""
+
+    while len(backup_set) > 0:
+        next_dir = os.path.join(vim_dir, backup_set.pop())
+        next_old_dir = next_dir + conf.old_dir_pfx
+        if os.path.exists(next_old_dir):
+            shutil.rmtree(next_old_dir, onerror=remove_readonly)
+        if os.path.exists(next_dir):
+            os.rename(next_dir, next_old_dir)
+        next_new_dir = next_dir + conf.new_dir_pfx
+        if os.path.exists(next_new_dir):
+            os.rename(next_new_dir, next_dir)
+
+
 def get_vim_plugins():
     """load all vim plugins"""
     vim_dir = ''
@@ -132,16 +147,7 @@ def get_vim_plugins():
 
     copy_local_plugins(os.path.join(vim_dir, 'bundle' + conf.new_dir_pfx))
 
-    while len(backup_set) > 0:
-        next_dir = os.path.join(vim_dir, backup_set.pop())
-        next_old_dir = next_dir + conf.old_dir_pfx
-        if os.path.exists(next_old_dir):
-            shutil.rmtree(next_old_dir, onerror=remove_readonly)
-        if os.path.exists(next_dir):
-            os.rename(next_dir, next_old_dir)
-        next_new_dir = next_dir + conf.new_dir_pfx
-        if os.path.exists(next_new_dir):
-            os.rename(next_new_dir, next_dir)
+    remove_backup(vim_dir, conf, backup_set)
 
 
 def copy_local_plugins(bundles_dir):
