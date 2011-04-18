@@ -81,7 +81,10 @@ def get_url_plugin(plugin, getter, to_dir):
         print format('Downloading {0} to {1}', plugin.name, local_dir)
         url = format(getter.url, plugin.url)
         remote_file = urllib2.urlopen(url)
-        local_file = open(local_file_name, 'w')
+        fileflags = 'w'
+        if plugin.type != 'vim':
+            fileflags += 'b'
+        local_file = open(local_file_name, fileflags)
         local_file.write(remote_file.read())
         local_file.close()
     except urllib2.HTTPError, exc:
