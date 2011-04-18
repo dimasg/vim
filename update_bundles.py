@@ -9,7 +9,7 @@ import os
 import shutil
 import stat
 import sys
-import urllib
+import urllib2
 import zipfile
 
 import config
@@ -47,8 +47,23 @@ def get_url_plugin(plugin, getter, to_dir):
         local_dir,
         '{0}.{1}'.format(plugin.name, plugin.ext)
     )
-    print 'Downloading {0} to {1}'.format(plugin.name, local_dir)
-    urllib.urlretrieve(getter.url.format(plugin.url), local_file_name)
+
+    try:
+        print 'Downloading {0} to {1}'.format(plugin.name, local_dir)
+        url = getter.url.format(plugin.url)
+        remote_file = urllib2.urlopen(url)
+        fileflags = 'w'
+        if plugin.type != 'vim':
+            fileflags += 'b'
+        local_file = open(local_file_name, fileflags)
+        local_file.write(remote_file.read())
+        local_file.close()
+    except urllib2.HTTPError, exc:
+        print 'HTTPError: code={0}, url={1}'.format(exc.code, url)
+        return 0
+    except urllib2.URLError, exc:
+        print 'URLError: code={0}, url={1}'.format(exc.code, url)
+        return 0
 
     if 'extract' in plugin:
         if not zipfile.is_zipfile(local_file_name):
@@ -60,6 +75,8 @@ def get_url_plugin(plugin, getter, to_dir):
             print 'Extracting {0} to {1}'.format(local_file_name, local_dir)
             zip_file = zipfile.ZipFile(local_file_name, 'r')
             zip_file.extractall(local_dir)
+
+    return 1
 
 
 def get_run_plugin(plugin, getter, to_dir):
@@ -89,15 +106,18 @@ def get_run_plugin(plugin, getter, to_dir):
                 shutil.copy(os.path.join(dest_dir, file_name), to_dir)
             shutil.rmtree(dest_dir)
 
+    return 1
+
 
 def get_plugin(plugin, getter, to_dir):
     """ load plugin to to_dir via getter """
     if 'url' in getter:
-        get_url_plugin(plugin, getter, to_dir)
+        return get_url_plugin(plugin, getter, to_dir)
     elif 'run' in getter:
-        get_run_plugin(plugin, getter, to_dir)
+        return get_run_plugin(plugin, getter, to_dir)
     else:
         print 'Unknown getter type: {0}'.format(getter.type)
+        return 0
 
 
 def remove_backup(vim_dir, conf, backup_set):
@@ -139,7 +159,10 @@ def get_vim_plugins():
             backup_set.add(next_plugin.dest)
         for next_getter in conf.gets:
             if next_getter.type == next_plugin.get_type:
-                get_plugin(next_plugin, next_getter, next_dir)
+                if not (get_plugin(next_plugin, next_getter, next_dir)\
+                        or 'skip_on_error' in next_plugin):
+                    exit(1)
+
                 break
         else:
             print 'Unknown plugin get type: {0}'.format(next_plugin.get_type)
