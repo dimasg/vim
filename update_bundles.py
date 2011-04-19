@@ -93,7 +93,10 @@ def get_run_plugin(plugin, getter, to_dir):
             to_dir = os.path.join(to_dir, plugin.type)
         os.makedirs(to_dir)
     print 'Unpacking {0} to {1}'.format(plugin.url, to_dir)
-    os.system(getter.run.format(plugin.url, to_dir))
+    exec_res = os.system(getter.run.format(plugin.url, to_dir))
+    if exec_res != 0:
+        return 0
+
     if 'remove_dir' in getter:
         shutil.rmtree(
             os.path.join(to_dir, getter.remove_dir),
