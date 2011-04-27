@@ -371,6 +371,17 @@ if isdirectory(swap_dir)
     let &directory=swap_dir.'/'
 endif
 
+" то же самое для бэкапов
+let backup_dir=vimfiles_dir.'backupfiles/'
+
+if !isdirectory(backup_dir) && exists('*mkdir')
+    call mkdir(backup_dir)
+endif
+
+if isdirectory(backup_dir)
+    let &backupdir=backup_dir.'/'
+endif
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
