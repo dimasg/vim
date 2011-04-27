@@ -239,6 +239,7 @@ filetype indent on
 "" au BufWritePost * if getline(1) =~ "^#!.*/bin/"|silent !chmod a+x %|endif
 "" При открытии файла задавать для него соответствующий 'компилятор'
 autocmd! BufEnter *.pl compiler perl
+autocmd! BufEnter *.pm compiler perl
 
 "" Переключение кодировок файла
 set wildmenu
@@ -318,6 +319,8 @@ nmap <F6> <ESC>:cp<CR>
 imap <F6> <ESC>:cp<CR>
 nmap <F7> <ESC>:cn<CR>
 imap <F7> <ESC>:cn<CR>
+nmap <F9> <ESC>:make<CR>
+imap <F9> <ESC>:make<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
