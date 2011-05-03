@@ -271,7 +271,17 @@ set title
 " screen:
 "set titlestring=%t
 "set titleold=bash
-let &titlestring = "vim (" . expand("%:t") . ")"
+"
+function! NextTabOpened()
+    if &term == "screen"
+        let &titlestring = "[vim(" . expand("%:t") . ")]"
+    else
+        let &titlestring = "vim(" . expand("%:t") . ")"
+    endif
+endfunction
+"
+call NextTabOpened()
+"let &titlestring = "[vim(" . expand("%:t") . ")]"
 if &term == "screen"
     set t_ts=k
     set t_fs=\
@@ -281,10 +291,6 @@ if &term == "screen" || &term == "xterm"
 endif
 
 autocmd! BufEnter * call NextTabOpened()
-"
-function! NextTabOpened()
-    let &titlestring = "vim (" . expand("%:t") . ")"
-endfunction
 
 if !has("gui_running")
     set mouse=a
@@ -319,6 +325,9 @@ nmap <F9> <ESC>:make<CR>
 imap <F9> <ESC>:make<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
+
+inoremap <silent> <Leader>h <ESC>:noh<CR>
+nnoremap <silent> <Leader>h <ESC>:noh<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
