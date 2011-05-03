@@ -140,8 +140,7 @@ set imsearch=0
 set tabstop=4
 set shiftwidth=4
 set autoindent smartindent
-set smarttab
-set expandtab
+set expandtab "set smarttab
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
