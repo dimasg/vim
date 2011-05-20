@@ -183,12 +183,6 @@ set showmatch       " показывать первую парную скобк�
 set autoread        " перечитывать изменённые файлы автоматически
 set confirm         " использовать диалоги вместо сообщений об ошибках
 
-" Автоматически перечитывать конфигурацию VIM после сохранения
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC
-
-" Прыгать на последнюю позицию при открытии буфера
-autocmd! BufReadPost * call LastPosition()
-autocmd! BufReadPost * call UpdateFileInfo()
 "
 function! LastPosition()
     " не меняем позицию при коммите 
@@ -234,6 +228,11 @@ au FileType crontab,fstab,make set noexpandtab tabstop=8 shiftwidth=8
 filetype on
 filetype plugin on
 filetype indent on
+" Автоматически перечитывать конфигурацию VIM после сохранения
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
+" Прыгать на последнюю позицию при открытии буфера
+autocmd! BufReadPost * call LastPosition()
+autocmd BufReadPost * call UpdateFileInfo()
 "" Если сохраняемый файл является файлом скрипта - сделать его исполняемым
 "" au BufWritePost * if getline(1) =~ "^#!.*/bin/"|silent !chmod a+x %|endif
 "" При открытии файла задавать для него соответствующий 'компилятор'
@@ -241,6 +240,7 @@ autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
 autocmd BufWritePre *.pl :%s/\s\+$//
 autocmd BufWritePre *.pm :%s/\s\+$//
+autocmd VimLeavePre * silent mksession! vimfiles_dir."/lastSession.vim"
 
 "" Переключение кодировок файла
 set wildmenu
@@ -285,7 +285,6 @@ function! NextTabOpened()
     endif
 endfunction
 "
-call NextTabOpened()
 "let &titlestring = "[vim(" . expand("%:t") . ")]"
 if &term == "screen"
     set t_ts=k
@@ -294,6 +293,7 @@ endif
 if &term == "screen" || &term == "xterm"
     set title
 endif
+call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
 
