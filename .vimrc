@@ -238,9 +238,9 @@ autocmd BufReadPost * call UpdateFileInfo()
 "" При открытии файла задавать для него соответствующий 'компилятор'
 autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
-autocmd BufWritePre *.pl :%s/\s\+$//
-autocmd BufWritePre *.pm :%s/\s\+$//
-autocmd VimLeavePre * silent mksession! vimfiles_dir."/lastSession.vim"
+autocmd BufWritePre *.pl :%s/\s\+$//e
+autocmd BufWritePre *.pm :%s/\s\+$//e
+autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
 
 "" Переключение кодировок файла
 set wildmenu
