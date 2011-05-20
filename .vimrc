@@ -236,6 +236,8 @@ filetype indent on
 "" При открытии файла задавать для него соответствующий 'компилятор'
 autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
+autocmd BufWritePre *.pl :%s/\s\+$//
+autocmd BufWritePre *.pm :%s/\s\+$//
 
 "" Переключение кодировок файла
 set wildmenu
