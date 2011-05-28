@@ -199,11 +199,11 @@ function! UpdateFileInfo()
     endif
 endfunction
 
+" опции сессий - перейти в текущию директорию, использовать буферы
+set sessionoptions=curdir,buffers,help,options,resize,slash,unix,winpos,winsize
 if version >= 700
-    " опции сессий - перейти в текущию директорию, использовать буферы и табы
-    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize
-else
-    set sessionoptions=curdir,buffers,help,options,resize,slash,winpos,winsize
+    " и табы
+    set sessionoptions+=tabpages 
 endif
 
 " При вставке фрагмента сохраняет отступы
