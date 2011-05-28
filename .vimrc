@@ -240,7 +240,11 @@ autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
 autocmd BufWritePre *.pl :%s/\s\+$//e
 autocmd BufWritePre *.pm :%s/\s\+$//e
-autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
+if has('win32')
+    autocmd VimLeavePre * silent mksession! ~/vimfiles/lastSession.vim
+else
+    autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
+endif
 
 " highlight trailing spaces
 "autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
