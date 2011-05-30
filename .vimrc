@@ -199,7 +199,7 @@ function! UpdateFileInfo()
     endif
 endfunction
 
-" опции сессий - перейти в текущию директорию, использовать буферы и табы
+" опции сессий - перейти в текущию директорию, использовать буферы
 set sessionoptions=curdir,buffers,help,options,resize,slash,unix,winpos,winsize
 if version >= 700
     " и табы
