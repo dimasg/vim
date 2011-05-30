@@ -19,7 +19,7 @@ if filereadable(vimfiles_dir."autoload/pathogen.vim")
 endif
 filetype plugin indent on
 
-" bit prevents some security exploits 
+" bit prevents some security exploits
 "set modelines=0
 set modeline
 set modelines=3
@@ -63,7 +63,7 @@ endif
 
 if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
     colorscheme robokai
-    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040          
+    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040
     if &term == "xterm"
         highlight StatusLine ctermfg=black ctermbg=white term=bold
     else
@@ -75,7 +75,7 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     "
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
-    
+
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
     colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
@@ -93,7 +93,7 @@ elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
                 highlight StatusLine ctermfg=black term=bold
             endif
         endif
-        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
+        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50
     endif
     highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
 endif
@@ -131,7 +131,7 @@ if version >= 700 && has("spell")
     " map spell on/off for English/Russian
     map <F11> <Esc>:call ChangeSpiellLang()<CR>
     " limit it to just the top 10 items
-    set sps=best,10 
+    set sps=best,10
 endif
 " по умолчанию латинская раскладка
 set iminsert=0
@@ -185,7 +185,7 @@ set confirm         " использовать диалоги вместо со�
 
 "
 function! LastPosition()
-    " не меняем позицию при коммите 
+    " не меняем позицию при коммите
     if expand("<afile>:s? \d+??") != '.git\COMMIT_EDITMSG'
         if expand("<afile>:t") != ".git" && line("'\"")<=line('$')
             normal! `"
@@ -201,7 +201,7 @@ endfunction
 
 if version >= 700
     " опции сессий - перейти в текущию директорию, использовать буферы и табы
-    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize 
+    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize
 else
     set sessionoptions=curdir,buffers,help,options,resize,slash,winpos,winsize
 endif
@@ -307,7 +307,7 @@ if has('gui')
         let &guioptions = substitute(&guioptions, "t", "", "g")
     endif
     set guioptions-=T " отключить тулбар в GUI
-    "set guioptions-=m " отключить меню  
+    "set guioptions-=m " отключить меню
     au GUIEnter * :set lines=99999 columns=99999
 endif
 " В разных графических системах используем разные шрифты:
@@ -341,17 +341,17 @@ endfunction
 if has('statusline')
     set statusline=%f\                  " filename
     set statusline+=%L                  " lines in buffer
-    set statusline+=%y                  " type of file 
+    set statusline+=%y                  " type of file
     set statusline+=%r\                 " read-only flag
     set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
     set statusline+=%{SyntaxItem()}     " syntax item
     set statusline+=%=%m\               " modified flag
     set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
-    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column 
+    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column
     set statusline+=%P                  " percentage
 endif
-" %{GitBranch()}\ 
+" %{GitBranch()}\
 set laststatus=2
 
 " tab navigation like firefox
