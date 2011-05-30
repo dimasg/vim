@@ -242,6 +242,14 @@ autocmd BufWritePre *.pl :%s/\s\+$//e
 autocmd BufWritePre *.pm :%s/\s\+$//e
 autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
 
+" highlight trailing spaces
+"autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
+" highlight tabs between spaces
+"autocmd BufNewFile,BufRead * let b:mtabbeforesp=matchadd(ErrorMsg, \v(\t+)\ze( +), -1)
+"autocmd BufNewFile,BufRead * let b:mtabaftersp=matchadd(ErrorMsg, \v( +)\zs(\t+), -1)
+" disable matches in help buffers
+"autocmd BufEnter,FileType help call clearmatches()
+
 "" Переключение кодировок файла
 set wildmenu
 set wcm=<Tab>
