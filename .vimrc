@@ -301,13 +301,16 @@ if has('gui')
     set guioptions-=T " отключить тулбар в GUI
     "set guioptions-=m " отключить меню  
     au GUIEnter * :set lines=99999 columns=99999
-endif
-" В разных графических системах используем разные шрифты:
-if has('win32')
-    set guifont=Lucida_Console:h11:cRUSSIAN::
-    behave xterm
-else
-    set guifont=Terminus\ 14
+    " В разных графических системах используем разные шрифты:
+    if has('win32')
+        set guifont=Consolas:h13:cRUSSIAN::
+        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+            set guifont=Lucida_Console:h12:cRUSSIAN::
+        endif
+        behave xterm
+    else
+        set guifont=Terminus\ 14
+    endif
 endif
 
 " сохраняемся по F2
