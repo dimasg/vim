@@ -19,7 +19,7 @@ if filereadable(vimfiles_dir."autoload/pathogen.vim")
 endif
 filetype plugin indent on
 
-" bit prevents some security exploits 
+" bit prevents some security exploits
 "set modelines=0
 set modeline
 set modelines=3
@@ -63,7 +63,7 @@ endif
 
 if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
     colorscheme robokai
-    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040          
+    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040
     if &term == "xterm"
         highlight StatusLine ctermfg=black ctermbg=white term=bold
     else
@@ -75,7 +75,7 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     "
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
-    
+
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
     colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
@@ -93,7 +93,7 @@ elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
                 highlight StatusLine ctermfg=black term=bold
             endif
         endif
-        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
+        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50
     endif
     highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
 endif
@@ -131,7 +131,7 @@ if version >= 700 && has("spell")
     " map spell on/off for English/Russian
     map <F11> <Esc>:call ChangeSpiellLang()<CR>
     " limit it to just the top 10 items
-    set sps=best,10 
+    set sps=best,10
 endif
 " по умолчанию латинская раскладка
 set iminsert=0
@@ -140,8 +140,7 @@ set imsearch=0
 set tabstop=4
 set shiftwidth=4
 set autoindent smartindent
-set smarttab
-set expandtab
+set expandtab "set smarttab
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -184,15 +183,9 @@ set showmatch       " показывать первую парную скобк�
 set autoread        " перечитывать изменённые файлы автоматически
 set confirm         " использовать диалоги вместо сообщений об ошибках
 
-" Автоматически перечитывать конфигурацию VIM после сохранения
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC
-
-" Прыгать на последнюю позицию при открытии буфера
-autocmd! BufReadPost * call LastPosition()
-autocmd! BufReadPost * call UpdateFileInfo()
 "
 function! LastPosition()
-    " не меняем позицию при коммите 
+    " не меняем позицию при коммите
     if expand("<afile>:s? \d+??") != '.git\COMMIT_EDITMSG'
         if expand("<afile>:t") != ".git" && line("'\"")<=line('$')
             normal! `"
@@ -206,11 +199,11 @@ function! UpdateFileInfo()
     endif
 endfunction
 
+" опции сессий - перейти в текущию директорию, использовать буферы
+set sessionoptions=curdir,buffers,help,options,resize,slash,unix,winpos,winsize
 if version >= 700
-    " опции сессий - перейти в текущию директорию, использовать буферы и табы
-    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize 
-else
-    set sessionoptions=curdir,buffers,help,options,resize,slash,winpos,winsize
+    " и табы
+    set sessionoptions+=tabpages 
 endif
 
 " При вставке фрагмента сохраняет отступы
@@ -235,10 +228,31 @@ au FileType crontab,fstab,make set noexpandtab tabstop=8 shiftwidth=8
 filetype on
 filetype plugin on
 filetype indent on
+" Автоматически перечитывать конфигурацию VIM после сохранения
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
+" Прыгать на последнюю позицию при открытии буфера
+autocmd! BufReadPost * call LastPosition()
+autocmd BufReadPost * call UpdateFileInfo()
 "" Если сохраняемый файл является файлом скрипта - сделать его исполняемым
 "" au BufWritePost * if getline(1) =~ "^#!.*/bin/"|silent !chmod a+x %|endif
 "" При открытии файла задавать для него соответствующий 'компилятор'
 autocmd! BufEnter *.pl compiler perl
+autocmd! BufEnter *.pm compiler perl
+autocmd BufWritePre *.pl :%s/\s\+$//e
+autocmd BufWritePre *.pm :%s/\s\+$//e
+if has('win32')
+    autocmd VimLeavePre * silent mksession! ~/vimfiles/lastSession.vim
+else
+    autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
+endif
+
+" highlight trailing spaces
+"autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
+" highlight tabs between spaces
+"autocmd BufNewFile,BufRead * let b:mtabbeforesp=matchadd(ErrorMsg, \v(\t+)\ze( +), -1)
+"autocmd BufNewFile,BufRead * let b:mtabaftersp=matchadd(ErrorMsg, \v( +)\zs(\t+), -1)
+" disable matches in help buffers
+"autocmd BufEnter,FileType help call clearmatches()
 
 "" Переключение кодировок файла
 set wildmenu
@@ -274,7 +288,16 @@ set title
 " screen:
 "set titlestring=%t
 "set titleold=bash
-let &titlestring = "vim (" . expand("%:t") . ")"
+"
+function! NextTabOpened()
+    if &term == "screen"
+        let &titlestring = "[vim(" . expand("%:t") . ")]"
+    else
+        let &titlestring = "vim(" . expand("%:t") . ")"
+    endif
+endfunction
+"
+"let &titlestring = "[vim(" . expand("%:t") . ")]"
 if &term == "screen"
     set t_ts=k
     set t_fs=\
@@ -282,12 +305,9 @@ endif
 if &term == "screen" || &term == "xterm"
     set title
 endif
+call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
-"
-function! NextTabOpened()
-    let &titlestring = "vim (" . expand("%:t") . ")"
-endfunction
 
 if !has("gui_running")
     set mouse=a
@@ -299,7 +319,7 @@ if has('gui')
         let &guioptions = substitute(&guioptions, "t", "", "g")
     endif
     set guioptions-=T " отключить тулбар в GUI
-    "set guioptions-=m " отключить меню  
+    "set guioptions-=m " отключить меню
     au GUIEnter * :set lines=99999 columns=99999
     " В разных графических системах используем разные шрифты:
     if has('win32')
@@ -321,8 +341,13 @@ nmap <F6> <ESC>:cp<CR>
 imap <F6> <ESC>:cp<CR>
 nmap <F7> <ESC>:cn<CR>
 imap <F7> <ESC>:cn<CR>
+nmap <F9> <ESC>:make<CR>
+imap <F9> <ESC>:make<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
+
+inoremap <silent> <Leader>h <ESC>:noh<CR>
+nnoremap <silent> <Leader>h <ESC>:noh<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
@@ -331,17 +356,17 @@ endfunction
 if has('statusline')
     set statusline=%f\                  " filename
     set statusline+=%L                  " lines in buffer
-    set statusline+=%y                  " type of file 
+    set statusline+=%y                  " type of file
     set statusline+=%r\                 " read-only flag
     set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
     set statusline+=%{SyntaxItem()}     " syntax item
     set statusline+=%=%m\               " modified flag
     set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
-    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column 
+    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column
     set statusline+=%P                  " percentage
 endif
-" %{GitBranch()}\ 
+" %{GitBranch()}\
 set laststatus=2
 
 " tab navigation like firefox
@@ -372,6 +397,17 @@ endif
 
 if isdirectory(swap_dir)
     let &directory=swap_dir.'/'
+endif
+
+" то же самое для бэкапов
+let backup_dir=vimfiles_dir.'backupfiles/'
+
+if !isdirectory(backup_dir) && exists('*mkdir')
+    call mkdir(backup_dir)
+endif
+
+if isdirectory(backup_dir)
+    let &backupdir=backup_dir.'/'
 endif
 
 " dvg - end
