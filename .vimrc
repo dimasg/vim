@@ -174,7 +174,9 @@ set smartcase
 
 set hidden          " не выгружать буфер когда переключаешься на другой
 if has("mouse")
-    set mouse=a         " включает поддержку мыши при работе в терминале (без GUI)
+    if !has("gui_running")
+        set mouse=a     " включает поддержку мыши при работе в терминале (без GUI)
+    endif
     set mousehide       " скрывать мышь в режиме ввода текста
 endif
 set showcmd         " показывать незавершенные команды в статусбаре (автодополнение ввода)
@@ -305,10 +307,6 @@ endif
 call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
-
-if !has("gui_running")
-    set mouse=a
-endif
 
 if has('gui')
     " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
