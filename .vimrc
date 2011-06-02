@@ -346,6 +346,8 @@ inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
 inoremap <silent> <Leader>h <ESC>:noh<CR>
 nnoremap <silent> <Leader>h <ESC>:noh<CR>
+inoremap <silent> <Leader>d <ESC>:VCSDiff<CR>
+nnoremap <silent> <Leader>d <ESC>:VCSDiff<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
