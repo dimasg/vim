@@ -174,7 +174,9 @@ set smartcase
 
 set hidden          " не выгружать буфер когда переключаешься на другой
 if has("mouse")
-    set mouse=a         " включает поддержку мыши при работе в терминале (без GUI)
+    if !has("gui_running")
+        set mouse=a     " включает поддержку мыши при работе в терминале (без GUI)
+    endif
     set mousehide       " скрывать мышь в режиме ввода текста
 endif
 set showcmd         " показывать незавершенные команды в статусбаре (автодополнение ввода)
@@ -309,10 +311,6 @@ call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
 
-if !has("gui_running")
-    set mouse=a
-endif
-
 if has('gui')
     " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
     if has('win32')
@@ -321,13 +319,19 @@ if has('gui')
     set guioptions-=T " отключить тулбар в GUI
     "set guioptions-=m " отключить меню
     au GUIEnter * :set lines=99999 columns=99999
-endif
-" В разных графических системах используем разные шрифты:
-if has('win32')
-    set guifont=Lucida_Console:h11:cRUSSIAN::
-    behave xterm
-else
-    set guifont=Terminus\ 14
+    " В разных графических системах используем разные шрифты:
+    if has('win32')
+        set guifont=Consolas:h13:cRUSSIAN::
+        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+            set guifont=Lucida_Console:h12:cRUSSIAN::
+        endif
+        behave xterm
+    else
+        set guifont=Consolas\ 14
+        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+            set guifont=Terminus\ 14
+        endif
+    endif
 endif
 
 " сохраняемся по F2
