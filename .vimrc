@@ -239,6 +239,22 @@ filetype indent on
 "" При открытии файла задавать для него соответствующий 'компилятор'
 autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
+autocmd BufWritePre *.pl :%s/\s\+$//e
+autocmd BufWritePre *.pm :%s/\s\+$//e
+autocmd BufWritePre *.py :%s/\s\+$//e
+if has('win32')
+    autocmd VimLeavePre * silent mksession! ~/vimfiles/lastSession.vim
+else
+    autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
+endif
+
+" highlight trailing spaces
+"autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
+" highlight tabs between spaces
+"autocmd BufNewFile,BufRead * let b:mtabbeforesp=matchadd(ErrorMsg, \v(\t+)\ze( +), -1)
+"autocmd BufNewFile,BufRead * let b:mtabaftersp=matchadd(ErrorMsg, \v( +)\zs(\t+), -1)
+" disable matches in help buffers
+"autocmd BufEnter,FileType help call clearmatches()
 
 "" Переключение кодировок файла
 set wildmenu
