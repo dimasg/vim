@@ -19,7 +19,7 @@ if filereadable(vimfiles_dir."autoload/pathogen.vim")
 endif
 filetype plugin indent on
 
-" bit prevents some security exploits 
+" bit prevents some security exploits
 "set modelines=0
 set modeline
 set modelines=3
@@ -63,19 +63,21 @@ endif
 
 if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
     colorscheme robokai
-    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040          
+    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040
     if &term == "xterm"
         highlight StatusLine ctermfg=black ctermbg=white term=bold
     else
         highlight StatusLine ctermfg=black term=bold
     endif
     " from darkblue
-    hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
-    hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+    highlight Visual	guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
+    highlight VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+    " for diff-mode
+    highlight DiffChange term=bold cterm=bold ctermfg=black ctermbg=red guibg=DarkMagenta
     "
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
-    
+
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
     colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
@@ -93,7 +95,7 @@ elseif filereadable(expand("$VIMRUNTIME/colors/darkblue.vim"))
                 highlight StatusLine ctermfg=black term=bold
             endif
         endif
-        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50 
+        highlight Comment term=bold ctermfg=3 gui=italic guifg=gray50
     endif
     highlight lCursor ctermfg=yellow ctermbg=red   guifg=NONE    guibg=cyan
 endif
@@ -131,7 +133,7 @@ if version >= 700 && has("spell")
     " map spell on/off for English/Russian
     map <F11> <Esc>:call ChangeSpiellLang()<CR>
     " limit it to just the top 10 items
-    set sps=best,10 
+    set sps=best,10
 endif
 " по умолчанию латинская раскладка
 set iminsert=0
@@ -174,7 +176,9 @@ set smartcase
 
 set hidden          " не выгружать буфер когда переключаешься на другой
 if has("mouse")
-    set mouse=a         " включает поддержку мыши при работе в терминале (без GUI)
+    if !has("gui_running")
+        set mouse=a     " включает поддержку мыши при работе в терминале (без GUI)
+    endif
     set mousehide       " скрывать мышь в режиме ввода текста
 endif
 set showcmd         " показывать незавершенные команды в статусбаре (автодополнение ввода)
@@ -183,15 +187,9 @@ set showmatch       " показывать первую парную скобк�
 set autoread        " перечитывать изменённые файлы автоматически
 set confirm         " использовать диалоги вместо сообщений об ошибках
 
-" Автоматически перечитывать конфигурацию VIM после сохранения
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC
-
-" Прыгать на последнюю позицию при открытии буфера
-autocmd! BufReadPost * call LastPosition()
-autocmd! BufReadPost * call UpdateFileInfo()
 "
 function! LastPosition()
-    " не меняем позицию при коммите 
+    " не меняем позицию при коммите
     if expand("<afile>:s? \d+??") != '.git\COMMIT_EDITMSG'
         if expand("<afile>:t") != ".git" && line("'\"")<=line('$')
             normal! `"
@@ -205,11 +203,11 @@ function! UpdateFileInfo()
     endif
 endfunction
 
+" опции сессий - перейти в текущию директорию, использовать буферы
+set sessionoptions=curdir,buffers,help,options,resize,slash,unix,winpos,winsize
 if version >= 700
-    " опции сессий - перейти в текущию директорию, использовать буферы и табы
-    set sessionoptions=curdir,buffers,help,options,resize,slash,tabpages,winpos,winsize 
-else
-    set sessionoptions=curdir,buffers,help,options,resize,slash,winpos,winsize
+    " и табы
+    set sessionoptions+=tabpages
 endif
 
 " При вставке фрагмента сохраняет отступы
@@ -234,6 +232,11 @@ au FileType crontab,fstab,make set noexpandtab tabstop=8 shiftwidth=8
 filetype on
 filetype plugin on
 filetype indent on
+" Автоматически перечитывать конфигурацию VIM после сохранения
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
+" Прыгать на последнюю позицию при открытии буфера
+autocmd! BufReadPost * call LastPosition()
+autocmd BufReadPost * call UpdateFileInfo()
 "" Если сохраняемый файл является файлом скрипта - сделать его исполняемым
 "" au BufWritePost * if getline(1) =~ "^#!.*/bin/"|silent !chmod a+x %|endif
 "" При открытии файла задавать для него соответствующий 'компилятор'
@@ -299,7 +302,6 @@ function! NextTabOpened()
     endif
 endfunction
 "
-call NextTabOpened()
 "let &titlestring = "[vim(" . expand("%:t") . ")]"
 if &term == "screen"
     set t_ts=k
@@ -308,12 +310,9 @@ endif
 if &term == "screen" || &term == "xterm"
     set title
 endif
+call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
-
-if !has("gui_running")
-    set mouse=a
-endif
 
 if has('gui')
     " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -321,15 +320,21 @@ if has('gui')
         let &guioptions = substitute(&guioptions, "t", "", "g")
     endif
     set guioptions-=T " отключить тулбар в GUI
-    "set guioptions-=m " отключить меню  
+    "set guioptions-=m " отключить меню
     au GUIEnter * :set lines=99999 columns=99999
-endif
-" В разных графических системах используем разные шрифты:
-if has('win32')
-    set guifont=Lucida_Console:h11:cRUSSIAN::
-    behave xterm
-else
-    set guifont=Terminus\ 14
+    " В разных графических системах используем разные шрифты:
+    if has('win32')
+        set guifont=Consolas:h13:cRUSSIAN::
+        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+            set guifont=Lucida_Console:h12:cRUSSIAN::
+        endif
+        behave xterm
+    else
+        set guifont=Consolas\ 14
+        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+            set guifont=Terminus\ 14
+        endif
+    endif
 endif
 
 " сохраняемся по F2
@@ -345,8 +350,9 @@ imap <F9> <ESC>:make<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
-inoremap <silent> <Leader>h <ESC>:noh<CR>
 nnoremap <silent> <Leader>h <ESC>:noh<CR>
+nnoremap <silent> <Leader>d <ESC>:VCSDiff<CR>
+nnoremap <silent> <Leader>q <ESC>:quit<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
@@ -355,17 +361,17 @@ endfunction
 if has('statusline')
     set statusline=%f\                  " filename
     set statusline+=%L                  " lines in buffer
-    set statusline+=%y                  " type of file 
+    set statusline+=%y                  " type of file
     set statusline+=%r\                 " read-only flag
     set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
     set statusline+=%{SyntaxItem()}     " syntax item
     set statusline+=%=%m\               " modified flag
     set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
-    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column 
+    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column
     set statusline+=%P                  " percentage
 endif
-" %{GitBranch()}\ 
+" %{GitBranch()}\
 set laststatus=2
 
 " tab navigation like firefox
