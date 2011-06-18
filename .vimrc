@@ -70,8 +70,10 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
         highlight StatusLine ctermfg=black term=bold
     endif
     " from darkblue
-    hi Visual		guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
-    hi VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+    highlight Visual	guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
+    highlight VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+    " for diff-mode
+    highlight DiffChange term=bold cterm=bold ctermfg=black ctermbg=red guibg=DarkMagenta
     "
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
@@ -205,7 +207,7 @@ endfunction
 set sessionoptions=curdir,buffers,help,options,resize,slash,unix,winpos,winsize
 if version >= 700
     " и табы
-    set sessionoptions+=tabpages 
+    set sessionoptions+=tabpages
 endif
 
 " При вставке фрагмента сохраняет отступы
