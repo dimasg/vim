@@ -361,11 +361,15 @@ if has('statusline')
     set statusline+=%r\                 " read-only flag
     set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
-    set statusline+=%{SyntaxItem()}     " syntax item
+    set statusline+=%{SyntaxItem()}\    " syntax item
+    set statusline+=%{GitBranchInfoString()} " git branch name
     set statusline+=%=%m\               " modified flag
     set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
     set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column
     set statusline+=%P                  " percentage
+    set statusline+=%{&hlsearch?'+':'-'} "
+    set statusline+=%{&paste?'=':'\ '} 
+    set statusline+=%{&wrap?'<':'>'} 
 endif
 " %{GitBranch()}\
 set laststatus=2
