@@ -241,6 +241,7 @@ autocmd! BufEnter *.pl compiler perl
 autocmd! BufEnter *.pm compiler perl
 autocmd BufWritePre *.pl :%s/\s\+$//e
 autocmd BufWritePre *.pm :%s/\s\+$//e
+autocmd BufWritePre *.py :%s/\s\+$//e
 if has('win32')
     autocmd VimLeavePre * silent mksession! ~/vimfiles/lastSession.vim
 else
