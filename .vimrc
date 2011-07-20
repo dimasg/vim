@@ -373,6 +373,7 @@ if has('statusline')
 endif
 " %{GitBranch()}\
 set laststatus=2
+let g:git_branch_status_nogit=""
 
 " tab navigation like firefox
 if version >= 700
