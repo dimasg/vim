@@ -346,10 +346,11 @@ nmap <F9> <ESC>:make<CR>
 imap <F9> <ESC>:make<CR>
 " ?
 inoremap <silent> <C-u> <ESC>u:set paste<CR>.:set nopaste<CR>gi
-
-nnoremap <silent> <Leader>h <ESC>:noh<CR>
+"
 nnoremap <silent> <Leader>d <ESC>:w<CR>:VCSDiff<CR>
+nnoremap <silent> <Leader>h <ESC>:noh<CR>
 nnoremap <silent> <Leader>q <ESC>:quit<CR>
+nnoremap <silent> <Leader>w <C-W><C-W>:res<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
