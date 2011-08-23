@@ -1,0 +1,17 @@
+﻿
+set tags=~/tags/tags
+
+" CScope
+if has("cscope")
+  " Ctrl-\ does reverse search (i.e. "who calls this function")
+  nnoremap <silent> <C-\> <ESC>:cscope find c <c-r>=expand("<cword>")<cr><cr>
+
+  set nocsverb
+  if filereadable("./cscope.out")
+    cs add ./cscope.out .
+  elseif filereadable("../cscope.out")
+    cs add ../cscope.out ..
+  endif
+  set csverb
+endif
+
