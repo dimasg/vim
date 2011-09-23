@@ -1,4 +1,4 @@
-ï»¿h1. Vim
+»¿h1. Vim
 
 * ".vimrc":https://github.com/dimasg/vim/blob/master/.vimrc - my vim config for win/linux for vim and gvim
 * "update_bundles.py":https://github.com/dimasg/vim/blob/master/update_bundles.py - script for "*pathogen*":http://www.vim.org/scripts/script.php?script_id=2332-like plugins autoupdate
