@@ -401,7 +401,7 @@ endif
 "snor <tab> <esc>i<right><c-r>=TriggerSnippet()<cr>
 
 " хранить swap-файлы будем в одном месте, чтобы не мешались
-let swap_dir=vimfiles_dir.'swapfiles/'
+let swap_dir=vimfiles_dir.'swapfiles'
 
 if !isdirectory(swap_dir) && exists('*mkdir')
     call mkdir(swap_dir)
@@ -412,7 +412,7 @@ if isdirectory(swap_dir)
 endif
 
 " то же самое для бэкапов
-let backup_dir=vimfiles_dir.'backupfiles/'
+let backup_dir=vimfiles_dir.'backupfiles'
 
 if !isdirectory(backup_dir) && exists('*mkdir')
     call mkdir(backup_dir)
@@ -420,6 +420,17 @@ endif
 
 if isdirectory(backup_dir)
     let &backupdir=backup_dir.'/'
+endif
+
+" то же самое для undo
+let undo_dir=vimfiles_dir.'undofiles'
+
+if !isdirectory(undo_dir) && exists('*mkdir')
+    call mkdir(undo_dir)
+endif
+
+if isdirectory(undo_dir)
+    let &undodir=undo_dir.'/'
 endif
 
 " dvg - end
