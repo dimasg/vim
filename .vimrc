@@ -78,6 +78,12 @@ if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/co
     highlight Class ctermfg=DarkYellow
     highlight LocalVariable ctermfg=DarkGrey
 
+elseif has('gui') && filereadable(vimfiles_dir.'bundle/twilight/colors/twilight.vim')
+    if has("eval")
+      let python_highlight_all = 1
+      let python_slow_sync = 1
+    endif
+    colorscheme twilight
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/darkz/colors/darkz.vim')
     colorscheme darkz
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/lucius/colors/lucius.vim')
