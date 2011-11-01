@@ -35,11 +35,6 @@ au FocusLost * :wa
 
 " end stevelosh
 
-if has("vms")
-    set nobackup    " do not keep a backup file, use versions instead
-else
-    set backup      " keep a backup file
-endif
 set history=250     " keep 250 lines of command line history
 set ruler           " show the cursor position all the time
 
@@ -411,14 +406,19 @@ if isdirectory(swap_dir)
 endif
 
 " то же самое для бэкапов
-let backup_dir=vimfiles_dir.'backupfiles'
+if has("vms")
+    set nobackup    " do not keep a backup file, use versions instead
+else
+    set backup      " keep a backup file
+    let backup_dir=vimfiles_dir.'backupfiles'
 
-if !isdirectory(backup_dir) && exists('*mkdir')
-    call mkdir(backup_dir)
-endif
+    if !isdirectory(backup_dir) && exists('*mkdir')
+        call mkdir(backup_dir)
+    endif
 
-if isdirectory(backup_dir)
-    let &backupdir=backup_dir.'/'
+    if isdirectory(backup_dir)
+        let &backupdir=backup_dir.'/'
+    endif
 endif
 
 " то же самое для undo
