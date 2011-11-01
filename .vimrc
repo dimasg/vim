@@ -27,10 +27,6 @@ set modelines=3
 set ttyfast
 set gdefault
 
-if version >= 703
-    set undofile
-endif
-
 set formatoptions=croql
 set cinoptions=l1,g0,p0,t0,c0,(s,U1,m1
 
@@ -426,14 +422,17 @@ if isdirectory(backup_dir)
 endif
 
 " то же самое для undo
-let undo_dir=vimfiles_dir.'undofiles'
+if version >= 703
+    set undofile
+    let undo_dir=vimfiles_dir.'undofiles'
 
-if !isdirectory(undo_dir) && exists('*mkdir')
-    call mkdir(undo_dir)
-endif
+    if !isdirectory(undo_dir) && exists('*mkdir')
+        call mkdir(undo_dir)
+    endif
 
-if isdirectory(undo_dir)
-    let &undodir=undo_dir.'/'
+    if isdirectory(undo_dir)
+        let &undodir=undo_dir.'/'
+    endif
 endif
 
 " dvg - end
