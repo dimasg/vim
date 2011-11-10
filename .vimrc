@@ -27,10 +27,6 @@ set modelines=3
 set ttyfast
 set gdefault
 
-if version >= 703
-    set undofile
-endif
-
 set formatoptions=croql
 set cinoptions=l1,g0,p0,t0,c0,(s,U1,m1
 
@@ -39,11 +35,6 @@ au FocusLost * :wa
 
 " end stevelosh
 
-if has("vms")
-    set nobackup    " do not keep a backup file, use versions instead
-else
-    set backup      " keep a backup file
-endif
 set history=250     " keep 250 lines of command line history
 set ruler           " show the cursor position all the time
 
@@ -415,25 +406,33 @@ if isdirectory(swap_dir)
 endif
 
 " то же самое для бэкапов
-let backup_dir=vimfiles_dir.'backupfiles'
+if has("vms")
+    set nobackup    " do not keep a backup file, use versions instead
+else
+    set backup      " keep a backup file
+    let backup_dir=vimfiles_dir.'backupfiles'
 
-if !isdirectory(backup_dir) && exists('*mkdir')
-    call mkdir(backup_dir)
-endif
+    if !isdirectory(backup_dir) && exists('*mkdir')
+        call mkdir(backup_dir)
+    endif
 
-if isdirectory(backup_dir)
-    let &backupdir=backup_dir.'/'
+    if isdirectory(backup_dir)
+        let &backupdir=backup_dir.'/'
+    endif
 endif
 
 " то же самое для undo
-let undo_dir=vimfiles_dir.'undofiles'
+if version >= 703
+    set undofile
+    let undo_dir=vimfiles_dir.'undofiles'
 
-if !isdirectory(undo_dir) && exists('*mkdir')
-    call mkdir(undo_dir)
-endif
+    if !isdirectory(undo_dir) && exists('*mkdir')
+        call mkdir(undo_dir)
+    endif
 
-if isdirectory(undo_dir)
-    let &undodir=undo_dir.'/'
+    if isdirectory(undo_dir)
+        let &undodir=undo_dir.'/'
+    endif
 endif
 
 " dvg - end
