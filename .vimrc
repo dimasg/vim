@@ -244,6 +244,8 @@ if has('win32')
 else
     autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
 endif
+" Single line comments for C and C++
+au FileType c,cpp setlocal comments-=:// comments+=f://
 
 " highlight trailing spaces
 "autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
