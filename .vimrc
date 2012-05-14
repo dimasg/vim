@@ -371,6 +371,9 @@ if has('statusline')
     set statusline+=%{&hlsearch?'+':'-'}
     set statusline+=%{&paste?'=':'\ '} 
     set statusline+=%{&wrap?'<':'>'} 
+    if has('gui_running')
+        set statusline+=\ %{strftime(\"%H:%M:%S\")}
+    endif
 endif
 " %{GitBranch()}\
 set laststatus=2
