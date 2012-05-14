@@ -356,19 +356,19 @@ function! SyntaxItem()
 endfunction
 
 if has('statusline')
-    set statusline=%f\                  " filename
-    set statusline+=%L                  " lines in buffer
-    set statusline+=%y                  " type of file
-    set statusline+=%r\                 " read-only flag
-    set statusline+=[%{&ff}]            " file type - unix/win e.t.c.
+    set statusline=
+    set statusline+=%f\                 " filename
+    set statusline+=%y\                 " type of file
+    set statusline+=%r                  " read-only flag
+    set statusline+=%m                  " modified flag
+    set statusline+=\ [%{&ff}]          " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
     set statusline+=%{SyntaxItem()}\    " syntax item
-    set statusline+=%{GitBranchInfoString()} " git branch name
-    set statusline+=%=%m\               " modified flag
-    set statusline+=%-15(0x%02B\ (%b)%) " byte under cursor, hex+decimal
-    set statusline+=%-15(%l,%c%V%)      " line number + column/virtual column
-    set statusline+=%P                  " percentage
-    set statusline+=%{&hlsearch?'+':'-'} "
+    set statusline+=%=%{GitBranchInfoString()}\ " git branch name
+    set statusline+=%12(0x%02B\ (%b)%)  " byte under cursor, hex+decimal
+    set statusline+=%16(%l/%L,%c%V%)    " line number + column/virtual column
+    set statusline+=\ %P                " percentage
+    set statusline+=%{&hlsearch?'+':'-'}
     set statusline+=%{&paste?'=':'\ '} 
     set statusline+=%{&wrap?'<':'>'} 
 endif
