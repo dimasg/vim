@@ -5,3 +5,5 @@ sys.path.insert(0,'C:\\dev\\Python27\\lib')
 sys.path.insert(0,'C:\\dev\\Python27\\lib\\site-packages')
 
 ENDPYTHON
+
+let g:pep8_args="--max-line-length=95"
