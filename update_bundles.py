@@ -84,7 +84,7 @@ def get_run_plugin(plugin, getter, to_dir):
     next_name = plugin.url.split('/')[-1]
     if next_name.find('.') >= 0:
         next_name = next_name.rpartition('.')[0]
-    if next_name == None or next_name == '':
+    if next_name is None or next_name == '':
         print '{0} parsing name error'.format(plugin.url)
         exit(4)
     if 'no_sub_dirs' not in plugin:
@@ -162,7 +162,7 @@ def get_vim_plugins():
             backup_set.add(next_plugin.dest)
         for next_getter in conf.gets:
             if next_getter.type == next_plugin.get_type:
-                if not (get_plugin(next_plugin, next_getter, next_dir)\
+                if not (get_plugin(next_plugin, next_getter, next_dir)
                         or 'skip_on_error' in next_plugin):
                     exit(1)
 
