@@ -321,6 +321,7 @@ if has('gui')
     " В разных графических системах используем разные шрифты:
     if has('win32')
         set guifont=Consolas:h13:cRUSSIAN::
+        " set guifont=Consolas:h13::cGB2312::
         if matchstr(&guifont,'Consolas\.*') != 'Consolas'
             set guifont=Lucida_Console:h12:cRUSSIAN::
         endif
