@@ -441,6 +441,11 @@ if version >= 703
     endif
 endif
 
+if exists('g:loaded_mark')
+    let g:mwDefaultHighlightingPalette = 'extended'
+    let g:mwVerbose = 0
+endif
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
