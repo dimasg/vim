@@ -44,7 +44,7 @@ map Q gq
 set number
 "set relativenumber
 
-if has('win32') || has('gui')
+if has('win32') || has('gui') || $TERM == 'xterm'
     set t_Co=256    " использовать больше цветов в терминале
 endif
 if &t_Co > 2
