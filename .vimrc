@@ -52,23 +52,28 @@ if &t_Co > 2
     set hlsearch
 endif
 
-if !(has('gui') || has('win32')) && filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
-    colorscheme robokai
-    highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040
-    if &term == "xterm"
-        highlight StatusLine ctermfg=black ctermbg=white term=bold
-    else
-        highlight StatusLine ctermfg=black term=bold
+if !(has('gui') || has('win32'))
+    if filereadable(vimfiles_dir.'bundle/robokai/colors/robokai.vim')
+        colorscheme robokai
+        highlight Normal  ctermfg=gray   ctermbg=black guifg=#c0c0c0 guibg=#000040
+        if &term == "xterm"
+            highlight StatusLine ctermfg=black ctermbg=white term=bold
+        else
+            highlight StatusLine ctermfg=black term=bold
+        endif
+        " from darkblue
+        highlight Visual	guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
+        highlight VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
+        " for diff-mode
+        highlight DiffChange term=bold cterm=bold ctermfg=black ctermbg=red guibg=DarkMagenta
+        "
+        highlight Class ctermfg=DarkYellow
+        highlight LocalVariable ctermfg=DarkGrey
     endif
-    " from darkblue
-    highlight Visual	guifg=#8080ff guibg=fg		gui=reverse				ctermfg=lightblue ctermbg=fg cterm=reverse
-    highlight VisualNOS	guifg=#8080ff guibg=fg		gui=reverse,underline	ctermfg=lightblue ctermbg=fg cterm=reverse,underline
-    " for diff-mode
-    highlight DiffChange term=bold cterm=bold ctermfg=black ctermbg=red guibg=DarkMagenta
-    "
-    highlight Class ctermfg=DarkYellow
-    highlight LocalVariable ctermfg=DarkGrey
-
+    if filereadable(vimfiles_dir.'bundle/vim-bandit/colors/bandit.vim')
+        colorscheme bandit
+        highlight MatchParen ctermbg=green
+    endif
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/twilight/colors/twilight.vim')
     if has("eval")
       let python_highlight_all = 1
