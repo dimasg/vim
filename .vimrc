@@ -147,6 +147,10 @@ set autoindent smartindent
 set expandtab "set smarttab
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+" new window on right side for vsplit
+set splitright
+" new window below for split
+set splitbelow
 
 " граница переноса
 set wrapmargin=5
