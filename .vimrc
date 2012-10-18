@@ -143,7 +143,9 @@ set iminsert=0
 set imsearch=0
 set tabstop=4
 set shiftwidth=4
-set autoindent smartindent
+set autoindent  " Copy indent from current line when starting a new line
+set smartindent " Do smart autoindenting when starting a new line
+set copyindent  " Copy the structure of the existing lines indent
 set expandtab "set smarttab
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
