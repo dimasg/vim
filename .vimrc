@@ -169,7 +169,8 @@ if version >= 700
     set cursorline
 endif
 "set cursorcolumn
-set visualbell
+set visualbell " Use visual bell instead of beeping
+set noerrorbells " No bell for error messages
 " миннимальная высота окна
 set winminheight=1
 " делать активное окон максимального размера
