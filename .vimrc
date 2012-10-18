@@ -268,6 +268,7 @@ au FileType c,cpp setlocal comments-=:// comments+=f://
 
 "" Переключение кодировок файла
 set wildmenu
+set wildmode=list:full
 set wcm=<Tab>
 menu Encoding.CP1251   :e ++enc=cp1251<CR>
 menu Encoding.CP866    :e ++enc=cp866<CR>
