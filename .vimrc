@@ -409,6 +409,8 @@ if version >= 700
     inoremap <C-w> <ESC>:tabclose<cr>
     nmap Z :tabprev<cr>
     nmap X :tabnext<cr>
+
+    set showtabline=2 " always show tabs
 endif
 
 "ino <tab> <c-r>=TriggerSnippet()<cr>
