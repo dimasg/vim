@@ -324,6 +324,7 @@ call NextTabOpened()
 
 autocmd! BufEnter * call NextTabOpened()
 
+match WrongSpaces /[ \t]\+$\| \t[ \t]*/
 if has('gui')
     " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
     if has('win32')
@@ -347,6 +348,7 @@ if has('gui')
         endif
     endif
 endif
+hi WrongSpaces ctermfg=240 guibg=red
 
 " сохраняемся по F2
 nmap <F2> <ESC>:w<CR>
