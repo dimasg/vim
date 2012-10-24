@@ -386,8 +386,8 @@ if has('statusline')
     set statusline+=%16(%l/%L,%c%V%)    " line number + column/virtual column
     set statusline+=\ %P                " percentage
     set statusline+=%{&hlsearch?'+':'-'}
-    set statusline+=%{&paste?'=':'\ '} 
-    set statusline+=%{&wrap?'<':'>'} 
+    set statusline+=%{&paste?'=':'\ '}
+    set statusline+=%{&wrap?'<':'>'}
     if has('gui_running')
         set statusline+=\ %{strftime(\"%H:%M:%S\")}
     endif
