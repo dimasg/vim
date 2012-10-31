@@ -462,6 +462,16 @@ endif
 let g:mwDefaultHighlightingPalette = 'extended'
 let g:mwVerbose = 0
 
+" tagbar win at left side
+let g:tagbar_left = 1
+" chars instead +/-
+let g:tagbar_iconchars = ['▶', '◢']
+" No sort
+"let g:tagbar_sort = 0
+
+nnoremap <silent> <Leader>t <ESC>:TagbarToggle<CR>
+inoremap <silent> <Leader>t <ESC>:TagbarToggle<CR>
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
