@@ -459,10 +459,8 @@ if version >= 703
     endif
 endif
 
-if exists('g:loaded_mark')
-    let g:mwDefaultHighlightingPalette = 'extended'
-    let g:mwVerbose = 0
-endif
+let g:mwDefaultHighlightingPalette = 'extended'
+let g:mwVerbose = 0
 
 " dvg - end
 " vim: ts=4 sw=4
