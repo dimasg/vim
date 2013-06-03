@@ -15,7 +15,7 @@ endif
 filetype off
 if filereadable(vimfiles_dir."autoload/pathogen.vim")
     call pathogen#helptags()
-    call pathogen#runtime_append_all_bundles()
+    call pathogen#incubate()
 endif
 filetype plugin indent on
 

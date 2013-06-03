@@ -14,8 +14,8 @@ endif
 
 
 
-syn keyword lsaStatement Icon ICON INDEX NOT NULL PK SK GK UNIQUE return exclude NOTAB Static Slave Manual Select RowName WhenEmpty access granted denied writable readonly not_referencible Name WIDTH RDBMS rdbmspp LEN java_gui_def java_gui MYSQL XMLVALIDATOR XMLTYPE SVALIDATOR XMLTYPE ENCRYPT HIDE DBLEN COLOR
-syn keyword lsaType Int INT INT_POSITIVE Double DOUBLE STR DATE TIME ID NAME BOOL MONEY STRA STR10 STR20 STR30 STR40 STR60 STR80 ENUM all
+syn keyword lsaStatement Icon ICON INDEX NOT NULL PK SK GK UNIQUE return exclude NOTAB Static Slave Owner Manual Select RowName WhenEmpty access granted denied writable readonly not_referencible Name WIDTH RDBMS rdbmspp LEN java_gui_def java_gui MYSQL XMLVALIDATOR XMLTYPE SVALIDATOR XMLTYPE ENCRYPT HIDE DBLEN COLOR
+syn keyword lsaType Int INT INT_POSITIVE Double DOUBLE POSITIVE_DOUBLE STR DATE TIME ID NAME BOOL MONEY STRA STR10 STR20 STR30 STR40 STR60 STR80 STR250 ENUM all SCURRENCY
 syn keyword lsaStorageClass UnArch Abstract Virtual Internal const
 syn keyword lsaStatement Class Attributes Methods Views DataWindow Window Folder Groups
 syn keyword lsaInclude parent embed
