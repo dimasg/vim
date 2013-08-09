@@ -73,6 +73,7 @@ if !(has('gui') || has('win32'))
     if filereadable(vimfiles_dir.'bundle/vim-bandit/colors/bandit.vim')
         colorscheme bandit
         highlight MatchParen ctermbg=green
+        highlight Class ctermfg=DarkYellow
     endif
 elseif has('gui') && filereadable(vimfiles_dir.'bundle/twilight/colors/twilight.vim')
     if has("eval")
