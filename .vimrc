@@ -259,6 +259,9 @@ else
 endif
 " Single line comments for C and C++
 au FileType c,cpp setlocal comments-=:// comments+=f://
+" Wrong spaces group for coding
+au FileType c,cpp,perl,python,vim match WrongSpaces /[ \t]\+$\| \t[ \t]*/
+syn match WrongSpaces /[ \t]\+$\| \t[ \t]*/
 
 " highlight trailing spaces
 "autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
@@ -348,8 +351,6 @@ if has('gui')
         endif
     endif
 endif
-hi WrongSpaces ctermbg=red guibg=red
-match WrongSpaces /[ \t]\+$\| \t[ \t]*/
 
 " сохраняемся по F2
 nmap <F2> <ESC>:w<CR>
