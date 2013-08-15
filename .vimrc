@@ -261,7 +261,7 @@ endif
 au FileType c,cpp setlocal comments-=:// comments+=f://
 " Wrong spaces group for coding
 au FileType c,cpp,perl,python,vim match WrongSpaces /[ \t]\+$\| \t[ \t]*/
-syn match WrongSpaces /[ \t]\+$\| \t[ \t]*/
+hi WrongSpaces ctermbg=red guibg=red
 
 " highlight trailing spaces
 "autocmd BufNewFile,BufRead * let b:mtrailingws=matchadd(ErrorMsg, \s\+$, -1)
