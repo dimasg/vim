@@ -273,7 +273,7 @@ hi WrongSpaces ctermbg=red guibg=red
 
 "" Переключение кодировок файла
 set wildmenu
-set wildmode=list:full
+set wildmode=longest:full,full
 set wildignore=*.swp,*.bak,*.pyc,*.class
 set wcm=<Tab>
 menu Encoding.CP1251   :e ++enc=cp1251<CR>
