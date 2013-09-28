@@ -338,10 +338,13 @@ if has('gui')
     au GUIEnter * :set lines=99999 columns=99999
     " В разных графических системах используем разные шрифты:
     if has('win32')
-        set guifont=Consolas:h13:cRUSSIAN::
-        " set guifont=Consolas:h13::cGB2312::
-        if matchstr(&guifont,'Consolas\.*') != 'Consolas'
-            set guifont=Lucida_Console:h12:cRUSSIAN::
+        set guifont=DejaVu_Sans_Mono:h13:cRUSSIAN::
+        if matchstr(&guifont,'DejaVu\.*') != 'DejaVu'
+            set guifont=Consolas:h13:cRUSSIAN::
+            " set guifont=Consolas:h13::cGB2312::
+            if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+                set guifont=Lucida_Console:h12:cRUSSIAN::
+            endif
         endif
         behave xterm
     else
