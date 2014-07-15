@@ -119,7 +119,7 @@ if version >= 700 && has("spell")
     setlocal spell spelllang=
     setlocal nospell
     "
-    function ChangeSpellLang()
+    function! ChangeSpellLang()
         if &spelllang =~ "en_us"
             setlocal spell spelllang=ru
             echo "spelllang: ru"
