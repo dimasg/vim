@@ -178,17 +178,17 @@ def get_vim_plugins():
 
 def copy_local_plugins(bundles_dir):
     """ copied local plugins """
-    if (os.path.exists(sys.argv[0])):
+    if os.path.exists(sys.argv[0]):
         local_dir = os.path.dirname(sys.argv[0])
     else:
         local_dir = '.'
     local_dir = os.path.join(local_dir, 'local')
-    if (os.path.exists(local_dir)):
+    if os.path.exists(local_dir):
         local_vim_dir = bundles_dir
         dir_names = dircache.opendir(local_dir)
         for name in dir_names:
             from_dir = os.path.join(local_dir, name)
-            if (os.path.isdir(from_dir)):
+            if os.path.isdir(from_dir):
                 to_dir = os.path.join(local_vim_dir, name)
                 print 'Copying local files from {0} to {1}'.format(
                     from_dir, to_dir
