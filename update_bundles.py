@@ -171,25 +171,24 @@ def get_vim_plugins():
             print 'Unknown plugin get type: {0}'.format(next_plugin.get_type)
             exit(3)
 
-    copy_local_plugins(os.path.join(vim_dir, 'bundle' + conf.new_dir_pfx))
+    copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf.new_dir_pfx))
 
     remove_backup(vim_dir, conf, backup_set)
 
 
-def copy_local_plugins(bundles_dir):
+def copy_local_plugins(source_dir, target_dir):
     """ copied local plugins """
     if os.path.exists(sys.argv[0]):
         local_dir = os.path.dirname(sys.argv[0])
     else:
         local_dir = '.'
-    local_dir = os.path.join(local_dir, 'local')
+    local_dir = os.path.join(local_dir, source_dir)
     if os.path.exists(local_dir):
-        local_vim_dir = bundles_dir
         dir_names = dircache.opendir(local_dir)
         for name in dir_names:
             from_dir = os.path.join(local_dir, name)
             if os.path.isdir(from_dir):
-                to_dir = os.path.join(local_vim_dir, name)
+                to_dir = os.path.join(target_dir, name)
                 print 'Copying local files from {0} to {1}'.format(
                     from_dir, to_dir
                 )
