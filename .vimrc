@@ -44,7 +44,7 @@ map Q gq
 set number
 "set relativenumber
 
-if has('win32') || has('gui') || $TERM == 'xterm'
+if has('win32') || has('gui') || $TERM == 'xterm' || $TERM == 'screen-256color'
     set t_Co=256    " использовать больше цветов в терминале
 endif
 if &t_Co > 2
@@ -309,7 +309,7 @@ set title
 "set titleold=bash
 "
 function! NextTabOpened()
-    if &term == "screen"
+    if &term == "screen" || $TERM == 'screen-256color'
         let &titlestring = "[vim(" . expand("%:t") . ")]"
     else
         let &titlestring = "vim(" . expand("%:t") . ")"
@@ -317,11 +317,11 @@ function! NextTabOpened()
 endfunction
 "
 "let &titlestring = "[vim(" . expand("%:t") . ")]"
-if &term == "screen"
+if &term == "screen" || $TERM == 'screen-256color'
     set t_ts=k
     set t_fs=\
 endif
-if &term == "screen" || &term == "xterm"
+if &term == "xterm" || &term == "screen" || $TERM == 'screen-256color'
     set title
 endif
 call NextTabOpened()
@@ -396,6 +396,8 @@ if has('statusline')
     set statusline+=%{&wrap?'<':'>'}
     if has('gui_running')
         set statusline+=\ %{strftime(\"%H:%M:%S\")}
+    elseif $TERM != 'screen' && $TERM != 'screen-256color'
+        set statusline+=\ %{strftime(\"%H:%M\")}
     endif
 endif
 " %{GitBranch()}\
