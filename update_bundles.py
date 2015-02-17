@@ -4,6 +4,7 @@
 # ruby original:
 # http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
+import argparse
 import dircache
 import os
 import shutil
@@ -138,7 +139,7 @@ def remove_backup(vim_dir, conf, backup_set):
             os.rename(next_new_dir, next_dir)
 
 
-def get_vim_plugins():
+def get_vim_plugins(cmd_args):
     """load all vim plugins"""
     vim_dir = ''
 
@@ -156,8 +157,12 @@ def get_vim_plugins():
         next_dir = os.path.join(vim_dir, next_plugin.dest + conf.new_dir_pfx)
         if next_plugin.dest not in backup_set:
             if os.path.exists(next_dir):
-                print '{0} already exists, remove it first!'.format(next_dir)
-                exit(2)
+                if cmd_args.clean:
+                    print '{0} dir removed'.format(next_dir)
+                    shutil.rmtree(next_dir, onerror=remove_readonly)
+                else:
+                    print '{0} already exists, remove it first!'.format(next_dir)
+                    exit(2)
             os.makedirs(next_dir)
             backup_set.add(next_plugin.dest)
         for next_getter in conf.gets:
@@ -195,8 +200,22 @@ def copy_local_plugins(source_dir, target_dir):
                 shutil.copytree(from_dir, to_dir)
 
 
-if __name__ == "__main__":
-    get_vim_plugins()
+def main():
+    """ main subroutine """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        '--clean', action='store_const',
+        const=True, default=False,
+        help='clean .new dirs if exist'
+    )
+    cmd_args = parser.parse_args()
+
+    get_vim_plugins(cmd_args)
     exit(0)
+
+
+if __name__ == "__main__":
+    main()
 
 # vim: ts=4 sw=4
