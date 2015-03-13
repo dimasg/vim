@@ -3,4 +3,4 @@ h1. Vim
 * ".vimrc":https://github.com/dimasg/vim/blob/master/.vimrc - my vim config for win/linux for vim and gvim
 * "update_bundles.py":https://github.com/dimasg/vim/blob/master/update_bundles.py - script for "*pathogen*":http://www.vim.org/scripts/script.php?script_id=2332-like plugins autoupdate
 * "plugins.cfg":https://github.com/dimasg/vim/blob/master/plugins.cfg - my annotated config for *update_bundles.py*
-
+* "cookbook.md":https://github.com/dimasg/vim/blob/master/cookbook.md - some vim how-to`s (russian language)
