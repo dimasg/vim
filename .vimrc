@@ -480,6 +480,10 @@ let g:tagbar_iconchars = ['▶', '◢']
 nnoremap <silent> <Leader>t <ESC>:TagbarToggle<CR>
 inoremap <silent> <Leader>t <ESC>:TagbarToggle<CR>
 
+if executable('ag')
+    let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
