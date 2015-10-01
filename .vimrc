@@ -484,6 +484,20 @@ if executable('ag')
     let g:ackprg = 'ag --nogroup --nocolor --column'
 endif
 
+if executable('fortune') && executable('cowsay')
+    function! s:filter_header(lines) abort
+        let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
+        let centered_lines = map(copy(a:lines),
+            \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+        return centered_lines
+    endfunction
+
+    let g:startify_custom_footer =
+          \ s:filter_header(map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['',''])
+endif
+" startify do not change dir to opened file
+let g:startify_change_to_dir = 0
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
