@@ -167,8 +167,8 @@ def get_vim_plugins(cmd_args):
             backup_set.add(next_plugin.dest)
         for next_getter in conf.gets:
             if next_getter.type == next_plugin.get_type:
-                if not (get_plugin(next_plugin, next_getter, next_dir)
-                        or 'skip_on_error' in next_plugin):
+                if not (get_plugin(next_plugin, next_getter, next_dir) or
+                        'skip_on_error' in next_plugin):
                     exit(1)
 
                 break
