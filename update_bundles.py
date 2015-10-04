@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Script for vim plugins update"""
 
 # ruby original:
@@ -30,7 +30,7 @@ def remove_readonly(file_name, path, _):
 def backup_dir(dir_name, backup_dir_name):
     """ backup dir """
     if os.path.exists(backup_dir_name):
-        print '{0} already exists, remove it first!'.format(backup_dir_name)
+        print('{0} already exists, remove it first!'.format(backup_dir_name))
         exit(2)
     if os.path.exists(dir_name):
         os.rename(dir_name, backup_dir_name)
@@ -50,7 +50,7 @@ def get_url_plugin(plugin, getter, to_dir):
     )
 
     try:
-        print 'Downloading {0} to {1}'.format(plugin.name, local_dir)
+        print('Downloading {0} to {1}'.format(plugin.name, local_dir))
         url = getter.url.format(plugin.url)
         remote_file = urllib2.urlopen(url)
         fileflags = 'w'
@@ -59,21 +59,21 @@ def get_url_plugin(plugin, getter, to_dir):
         local_file = open(local_file_name, fileflags)
         local_file.write(remote_file.read())
         local_file.close()
-    except urllib2.HTTPError, exc:
-        print 'HTTPError: code={0}, url={1}'.format(exc.code, url)
+    except urllib2.HTTPError as exc:
+        print('HTTPError: code={0}, url={1}'.format(exc.code, url))
         return 0
-    except urllib2.URLError, exc:
-        print 'URLError: code={0}, url={1}'.format(exc.code, url)
+    except urllib2.URLError as exc:
+        print('URLError: code={0}, url={1}'.format(exc.code, url))
         return 0
 
     if 'extract' in plugin:
         if not zipfile.is_zipfile(local_file_name):
-            print '{0} is not valid zip file!'.format(local_file_name)
+            print('{0} is not valid zip file!'.format(local_file_name))
         else:
             local_dir = to_dir
             if plugin.extract != '':
                 local_dir = os.path.join(local_dir, plugin.extract)
-            print 'Extracting {0} to {1}'.format(local_file_name, local_dir)
+            print('Extracting {0} to {1}'.format(local_file_name, local_dir))
             zip_file = zipfile.ZipFile(local_file_name, 'r')
             zip_file.extractall(local_dir)
 
@@ -86,14 +86,14 @@ def get_run_plugin(plugin, getter, to_dir):
     if next_name.find('.') >= 0:
         next_name = next_name.rpartition('.')[0]
     if next_name is None or next_name == '':
-        print '{0} parsing name error'.format(plugin.url)
+        print('{0} parsing name error'.format(plugin.url))
         exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = os.path.join(to_dir, next_name)
         if 'type' in plugin:
             to_dir = os.path.join(to_dir, plugin.type)
         os.makedirs(to_dir)
-    print 'Unpacking {0} to {1}'.format(plugin.url, to_dir)
+    print('Unpacking {0} to {1}'.format(plugin.url, to_dir))
     exec_res = os.system(getter.run.format(plugin.url, to_dir))
     if exec_res != 0:
         return 0
@@ -120,7 +120,7 @@ def get_plugin(plugin, getter, to_dir):
     elif 'run' in getter:
         return get_run_plugin(plugin, getter, to_dir)
     else:
-        print 'Unknown getter type: {0}'.format(getter.type)
+        print('Unknown getter type: {0}'.format(getter.type))
         return 0
 
 
@@ -158,10 +158,10 @@ def get_vim_plugins(cmd_args):
         if next_plugin.dest not in backup_set:
             if os.path.exists(next_dir):
                 if cmd_args.clean:
-                    print '{0} dir removed'.format(next_dir)
+                    print('{0} dir removed'.format(next_dir))
                     shutil.rmtree(next_dir, onerror=remove_readonly)
                 else:
-                    print '{0} already exists, remove it first!'.format(next_dir)
+                    print('{0} already exists, remove it first!'.format(next_dir))
                     exit(2)
             os.makedirs(next_dir)
             backup_set.add(next_plugin.dest)
@@ -173,7 +173,7 @@ def get_vim_plugins(cmd_args):
 
                 break
         else:
-            print 'Unknown plugin get type: {0}'.format(next_plugin.get_type)
+            print('Unknown plugin get type: {0}'.format(next_plugin.get_type))
             exit(3)
 
     copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf.new_dir_pfx))
@@ -194,9 +194,9 @@ def copy_local_plugins(source_dir, target_dir):
             from_dir = os.path.join(local_dir, name)
             if os.path.isdir(from_dir):
                 to_dir = os.path.join(target_dir, name)
-                print 'Copying local files from {0} to {1}'.format(
+                print('Copying local files from {0} to {1}'.format(
                     from_dir, to_dir
-                )
+                ))
                 shutil.copytree(from_dir, to_dir)
 
 
