@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """Script for vim plugins update"""
 
 # ruby original:
