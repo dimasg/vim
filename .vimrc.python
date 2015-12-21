@@ -6,4 +6,17 @@ sys.path.insert(0,'C:\\dev\\Python27\\lib\\site-packages')
 
 ENDPYTHON
 
-let g:pep8_args="--max-line-length=95"
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_warning_symbol = 'W>'
+let g:syntastic_python_checkers=['pep8', 'pylint', 'pyflakes']
+
+let g:syntastic_python_pep8_exec = 'C:\\dev\\python351\\Scripts\\pep8.bat'
+let g:syntastic_python_pep8_args = '--max-line-length=96'
+let g:syntastic_python_pylint_exec = 'C:\\dev\\python351\\Scripts\\pylint.bat'
+
+let g:syntastic_mode_map = { 'mode': 'passive',
+                             \ 'active_filetypes': ['python', 'perl'],
+                             \ 'passive_filetypes': [''] }
