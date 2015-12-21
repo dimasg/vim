@@ -504,6 +504,8 @@ if executable('fortune') && executable('cowsay')
 endif
 " startify do not change dir to opened file
 let g:startify_change_to_dir = 0
+" change to the root directory of the VCS
+let g:startify_change_to_vcs_root = 1
 
 " dvg - end
 " vim: ts=4 sw=4
