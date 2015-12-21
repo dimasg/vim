@@ -366,6 +366,10 @@ nmap <F6> <ESC>:cp<CR>
 imap <F6> <ESC>:cp<CR>
 nmap <F7> <ESC>:cn<CR>
 imap <F7> <ESC>:cn<CR>
+nmap <S-F6> <ESC>:lprevious<CR>
+imap <S-F6> <ESC>:lprevious<CR>
+nmap <S-F7> <ESC>:lnext<CR>
+imap <S-F7> <ESC>:lnext<CR>
 nmap <F9> <ESC>:make<CR>
 imap <F9> <ESC>:make<CR>
 " ?
