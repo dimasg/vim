@@ -4,7 +4,6 @@
 # ruby original:
 # http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
-import argparse
 import dircache
 import os
 import shutil
@@ -13,6 +12,7 @@ import sys
 import urllib2
 import zipfile
 
+import argparse
 import config
 
 
@@ -63,7 +63,7 @@ def get_url_plugin(plugin, getter, to_dir):
         print('HTTPError: code={0}, url={1}'.format(exc.code, url))
         return 0
     except urllib2.URLError as exc:
-        print('URLError: code={0}, url={1}'.format(exc.code, url))
+        print('URLError: code={0}, url={1}'.format(exc.reason, url))
         return 0
 
     if 'extract' in plugin:
