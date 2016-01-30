@@ -3,7 +3,7 @@
 set nocompatible
 
 if !empty($VIMFILES_DIR)
-    let vimfiles_dir=expand("$VIMFILES_DIR")
+    let vimfiles_dir=expand("$VIMFILES_DIR/")
 else
     if has('win32')
         language messages en
@@ -256,11 +256,7 @@ autocmd! BufEnter *.pm compiler perl
 "autocmd BufWritePre *.pl :%s/\s\+$//e
 "autocmd BufWritePre *.pm :%s/\s\+$//e
 "autocmd BufWritePre *.py :%s/\s\+$//e
-if has('win32')
-    autocmd VimLeavePre * silent mksession! ~/vimfiles/lastSession.vim
-else
-    autocmd VimLeavePre * silent mksession! ~/.vim/lastSession.vim
-endif
+execute "autocmd VimLeavePre * silent mksession! " . vimfiles_dir . 'lastSession.vim'
 " Single line comments for C and C++
 au FileType c,cpp setlocal comments-=:// comments+=f://
 " Wrong spaces group for coding
