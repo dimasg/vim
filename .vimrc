@@ -433,44 +433,47 @@ endif
 "ino <tab> <c-r>=TriggerSnippet()<cr>
 "snor <tab> <esc>i<right><c-r>=TriggerSnippet()<cr>
 
-" хранить swap-файлы будем в одном месте, чтобы не мешались
-let swap_dir=vimfiles_dir.'swapfiles'
+" настраиваем каталоги только если есть корневой
+if isdirectory(vimfiles_dir)
+    " хранить swap-файлы будем в одном месте, чтобы не мешались
+    let swap_dir=vimfiles_dir.'swapfiles'
 
-if !isdirectory(swap_dir) && exists('*mkdir')
-    call mkdir(swap_dir)
-endif
-
-if isdirectory(swap_dir)
-    let &directory=swap_dir.'//'
-endif
-
-" то же самое для бэкапов
-if has("vms")
-    set nobackup    " do not keep a backup file, use versions instead
-else
-    set backup      " keep a backup file
-    let backup_dir=vimfiles_dir.'backupfiles'
-
-    if !isdirectory(backup_dir) && exists('*mkdir')
-        call mkdir(backup_dir)
+    if !isdirectory(swap_dir) && exists('*mkdir')
+        call mkdir(swap_dir)
     endif
 
-    if isdirectory(backup_dir)
-        let &backupdir=backup_dir.'/'
-    endif
-endif
-
-" то же самое для undo
-if version >= 703
-    set undofile
-    let undo_dir=vimfiles_dir.'undofiles'
-
-    if !isdirectory(undo_dir) && exists('*mkdir')
-        call mkdir(undo_dir)
+    if isdirectory(swap_dir)
+        let &directory=swap_dir.'//'
     endif
 
-    if isdirectory(undo_dir)
-        let &undodir=undo_dir.'/'
+    " то же самое для бэкапов
+    if has("vms")
+        set nobackup    " do not keep a backup file, use versions instead
+    else
+        set backup      " keep a backup file
+        let backup_dir=vimfiles_dir.'backupfiles'
+
+        if !isdirectory(backup_dir) && exists('*mkdir')
+            call mkdir(backup_dir)
+        endif
+
+        if isdirectory(backup_dir)
+            let &backupdir=backup_dir.'/'
+        endif
+    endif
+
+    " то же самое для undo
+    if version >= 703
+        set undofile
+        let undo_dir=vimfiles_dir.'undofiles'
+
+        if !isdirectory(undo_dir) && exists('*mkdir')
+            call mkdir(undo_dir)
+        endif
+
+        if isdirectory(undo_dir)
+            let &undodir=undo_dir.'/'
+        endif
     endif
 endif
 
