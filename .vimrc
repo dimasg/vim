@@ -394,7 +394,9 @@ if has('statusline')
     set statusline+=\ [%{&ff}]          " file type - unix/win e.t.c.
     set statusline+=[%{&fenc}]\         " file encoding
     set statusline+=%{SyntaxItem()}\    " syntax item
-    set statusline+=%=%{GitBranchInfoString()}\ " git branch name
+    if filereadable(vimfiles_dir.'bundle/vim-git-branch-info/plugin/git-branch-info.vim')
+        set statusline+=%=%{GitBranchInfoString()}\ " git branch name
+    endif
     set statusline+=%12(0x%02B\ (%b)%)  " byte under cursor, hex+decimal
     set statusline+=%16(%l/%L,%c%V%)    " line number + column/virtual column
     set statusline+=\ %P                " percentage
