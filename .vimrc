@@ -2,12 +2,16 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-if has('win32')
-    language messages en
-    let vimfiles_dir=expand("$HOME/vimfiles/")
+if !empty($VIMFILES_DIR)
+    let vimfiles_dir=expand("$VIMFILES_DIR")
 else
-    language messages en_US.UTF-8
-    let vimfiles_dir=expand("$HOME/.vim/")
+    if has('win32')
+        language messages en
+        let vimfiles_dir=expand("$HOME/vimfiles/")
+    else
+        language messages en_US.UTF-8
+        let vimfiles_dir=expand("$HOME/.vim/")
+    endif
 endif
 
 " from http://stevelosh.com/blog/2010/09/coming-home-to-vim/
