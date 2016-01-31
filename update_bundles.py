@@ -131,11 +131,14 @@ def remove_backup(vim_dir, conf, backup_set):
         next_dir = os.path.join(vim_dir, backup_set.pop())
         next_old_dir = next_dir + conf.old_dir_pfx
         if os.path.exists(next_old_dir):
+            print('Removing old backup dir {0}'.format(next_old_dir))
             shutil.rmtree(next_old_dir, onerror=remove_readonly)
         if os.path.exists(next_dir):
+            print('Renaming old dir {0} to backup {1}'.format(next_dir, next_old_dir))
             os.rename(next_dir, next_old_dir)
         next_new_dir = next_dir + conf.new_dir_pfx
         if os.path.exists(next_new_dir):
+            print('Renaming new dir {0} to current {1}'.format(next_new_dir, next_dir))
             os.rename(next_new_dir, next_dir)
 
 
