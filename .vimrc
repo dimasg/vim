@@ -260,7 +260,7 @@ execute "autocmd VimLeavePre * silent mksession! " . vimfiles_dir . 'lastSession
 " Single line comments for C and C++
 au FileType c,cpp setlocal comments-=:// comments+=f://
 " Wrong spaces group for coding
-au FileType c,cpp,h,hpp,html,js,perl,python,vim,xml match WrongSpaces /[ \t]\+$\| \t[ \t]*/
+au FileType c,cpp,h,hpp,html,js,perl,php,python,vim,xml match WrongSpaces /[ \t]\+$\| \t[ \t]*/
 hi WrongSpaces ctermbg=red guibg=red
 
 " highlight trailing spaces
