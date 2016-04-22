@@ -512,6 +512,12 @@ let g:startify_change_to_dir = 0
 " change to the root directory of the VCS
 let g:startify_change_to_vcs_root = 1
 
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_warning_symbol = 'W>'
+
 " dvg - end
 " vim: ts=4 sw=4
 " end of file
