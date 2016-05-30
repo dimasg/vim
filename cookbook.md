@@ -9,3 +9,5 @@
 
 Изменение размеров split`а: Ctrl-W +/- по вертикали (Ctrl-W _ – максимум), Ctrl-W >/< – по горизонтали, Ctrl-W = – сделать равными
 
+При поиске смещение относительно начала/конца совпадения: /b[+-num] или /s[+-num] / /e[+-num]
+[:help search-offset](http://vimdoc.sourceforge.net/htmldoc/pattern.html#search-offset)
