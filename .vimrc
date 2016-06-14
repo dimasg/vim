@@ -380,6 +380,7 @@ nnoremap <silent> <Leader>e <ESC>:TlistToggle<CR>
 nnoremap <silent> <Leader>h <ESC>:noh<CR>
 nnoremap <silent> <Leader>q <ESC>:quit<CR>
 nnoremap <silent> <Leader>w <C-W><C-W>:res<CR>
+nnoremap <silent> <Leader>z <ESC>:SyntasticReset<CR>
 
 function! SyntaxItem()
     return synIDattr(synID(line("."),col("."),1),"name")
