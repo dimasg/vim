@@ -20,8 +20,15 @@ import jsmin
 def remove_readonly(file_name, path, _):
     """removed read-only entity"""
     if file_name is os.rmdir:
-        os.chmod(path, stat.S_IWRITE)
-        os.rmdir(path)
+        for root, dirs, files in os.walk(path, topdown=False):
+            for name in files:
+                path_name = os.path.join(root, name)
+                os.chmod(path_name, stat.S_IWRITE)
+                os.remove(path_name)
+            for name in dirs:
+                path_name = os.path.join(root, name)
+                os.chmod(path_name, stat.S_IWRITE)
+                os.rmdir(path_name)
     elif file_name is os.remove:
         os.chmod(path, stat.S_IWRITE)
         os.remove(path)
