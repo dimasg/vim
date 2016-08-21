@@ -348,11 +348,16 @@ if has('gui')
         endif
         behave xterm
     else
-        set guifont=Hack\ 13
-        if matchstr(&guifont,'Hack\.*') != 'Hack'
-            set guifont=Consolas\ 14
-            if matchstr(&guifont,'Consolas\.*') != 'Consolas'
-                set guifont=Terminus\ 14
+        let s:uname=system("uname -s")
+        if strpart(s:uname, 0, 6) == "Darwin"
+            set guifont=Monaco:h14
+        else
+            set guifont=Hack\ 13
+            if matchstr(&guifont,'Hack\.*') != 'Hack'
+                set guifont=Consolas\ 14
+                if matchstr(&guifont,'Consolas\.*') != 'Consolas'
+                    set guifont=Terminus\ 14
+                endif
             endif
         endif
     endif
