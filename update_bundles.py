@@ -4,7 +4,7 @@
 # ruby original:
 # http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
 
-import dircache
+import json
 import os
 import shutil
 import stat
@@ -13,15 +13,22 @@ import urllib2
 import zipfile
 
 import argparse
-import config
+import jsmin
 
 
 # from http://stackoverflow.com/questions/1889597/deleting-directory-in-python
 def remove_readonly(file_name, path, _):
     """removed read-only entity"""
     if file_name is os.rmdir:
-        os.chmod(path, stat.S_IWRITE)
-        os.rmdir(path)
+        for root, dirs, files in os.walk(path, topdown=False):
+            for name in files:
+                path_name = os.path.join(root, name)
+                os.chmod(path_name, stat.S_IWRITE)
+                os.remove(path_name)
+            for name in dirs:
+                path_name = os.path.join(root, name)
+                os.chmod(path_name, stat.S_IWRITE)
+                os.rmdir(path_name)
     elif file_name is os.remove:
         os.chmod(path, stat.S_IWRITE)
         os.remove(path)
@@ -41,20 +48,20 @@ def get_url_plugin(plugin, getter, to_dir):
     if 'no_sub_dirs' in plugin:
         local_dir = to_dir
     else:
-        to_dir = os.path.join(to_dir, plugin.name)
-        local_dir = os.path.join(to_dir, plugin.type)
+        to_dir = os.path.join(to_dir, plugin['name'])
+        local_dir = os.path.join(to_dir, plugin['type'])
         os.makedirs(local_dir)
     local_file_name = os.path.join(
         local_dir,
-        '{0}.{1}'.format(plugin.name, plugin.ext)
+        '{0}.{1}'.format(plugin['name'], plugin['ext'])
     )
 
     try:
-        print('Downloading {0} to {1}'.format(plugin.name, local_dir))
-        url = getter.url.format(plugin.url)
+        print('Downloading {0} to {1}'.format(plugin['name'], local_dir))
+        url = getter['url'].format(plugin['url'])
         remote_file = urllib2.urlopen(url)
         fileflags = 'w'
-        if plugin.type != 'vim':
+        if plugin['type'] != 'vim':
             fileflags += 'b'
         local_file = open(local_file_name, fileflags)
         local_file.write(remote_file.read())
@@ -71,8 +78,8 @@ def get_url_plugin(plugin, getter, to_dir):
             print('{0} is not valid zip file!'.format(local_file_name))
         else:
             local_dir = to_dir
-            if plugin.extract != '':
-                local_dir = os.path.join(local_dir, plugin.extract)
+            if plugin['extract'] != '':
+                local_dir = os.path.join(local_dir, plugin['extract'])
             print('Extracting {0} to {1}'.format(local_file_name, local_dir))
             zip_file = zipfile.ZipFile(local_file_name, 'r')
             zip_file.extractall(local_dir)
@@ -82,29 +89,29 @@ def get_url_plugin(plugin, getter, to_dir):
 
 def get_run_plugin(plugin, getter, to_dir):
     """ load 'run' plugin """
-    next_name = plugin.url.split('/')[-1]
+    next_name = plugin['url'].split('/')[-1]
     if next_name.find('.') >= 0:
         next_name = next_name.rpartition('.')[0]
     if next_name is None or next_name == '':
-        print('{0} parsing name error'.format(plugin.url))
+        print('{0} parsing name error'.format(plugin['url']))
         exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = os.path.join(to_dir, next_name)
         if 'type' in plugin:
-            to_dir = os.path.join(to_dir, plugin.type)
+            to_dir = os.path.join(to_dir, plugin['type'])
         os.makedirs(to_dir)
-    print('Unpacking {0} to {1}'.format(plugin.url, to_dir))
-    exec_res = os.system(getter.run.format(plugin.url, to_dir))
+    print('Unpacking {0} to {1}'.format(plugin['url'], to_dir))
+    exec_res = os.system(getter['run'].format(plugin['url'], to_dir))
     if exec_res != 0:
         return 0
 
     if 'remove_dir' in getter:
         shutil.rmtree(
-            os.path.join(to_dir, getter.remove_dir),
+            os.path.join(to_dir, getter['remove_dir']),
             onerror=remove_readonly
         )
     if 'no_sub_dirs' in plugin:
-        dest_dir = os.path.join(to_dir, plugin.dest)
+        dest_dir = os.path.join(to_dir, plugin['dest'])
         if os.path.exists(dest_dir):
             for file_name in os.listdir(dest_dir):
                 shutil.copy(os.path.join(dest_dir, file_name), to_dir)
@@ -120,7 +127,7 @@ def get_plugin(plugin, getter, to_dir):
     elif 'run' in getter:
         return get_run_plugin(plugin, getter, to_dir)
     else:
-        print('Unknown getter type: {0}'.format(getter.type))
+        print('Unknown getter type: {0}'.format(plugin['type']))
         return 0
 
 
@@ -129,14 +136,14 @@ def remove_backup(vim_dir, conf, backup_set):
 
     while len(backup_set) > 0:
         next_dir = os.path.join(vim_dir, backup_set.pop())
-        next_old_dir = next_dir + conf.old_dir_pfx
+        next_old_dir = next_dir + conf['old_dir_pfx']
         if os.path.exists(next_old_dir):
             print('Removing old backup dir {0}'.format(next_old_dir))
             shutil.rmtree(next_old_dir, onerror=remove_readonly)
         if os.path.exists(next_dir):
             print('Renaming old dir {0} to backup {1}'.format(next_dir, next_old_dir))
             os.rename(next_dir, next_old_dir)
-        next_new_dir = next_dir + conf.new_dir_pfx
+        next_new_dir = next_dir + conf['new_dir_pfx']
         if os.path.exists(next_new_dir):
             print('Renaming new dir {0} to current {1}'.format(next_new_dir, next_dir))
             os.rename(next_new_dir, next_dir)
@@ -151,14 +158,15 @@ def get_vim_plugins(cmd_args):
     else:
         vim_dir = os.path.expanduser("~/.vim")
 
-    cfg_file = file('plugins.cfg')
-    conf = config.Config(cfg_file)
+    conf = None
+    with open('plugins.cfg', 'r') as file:
+        conf = json.loads(jsmin.jsmin(file.read()))
 
     backup_set = set()
 
-    for next_plugin in conf.plugins:
-        next_dir = os.path.join(vim_dir, next_plugin.dest + conf.new_dir_pfx)
-        if next_plugin.dest not in backup_set:
+    for next_plugin in conf['plugins']:
+        next_dir = os.path.join(vim_dir, next_plugin['dest'] + conf['new_dir_pfx'])
+        if next_plugin['dest'] not in backup_set:
             if os.path.exists(next_dir):
                 if cmd_args.clean:
                     print('{0} dir removed'.format(next_dir))
@@ -167,19 +175,19 @@ def get_vim_plugins(cmd_args):
                     print('{0} already exists, remove it first!'.format(next_dir))
                     exit(2)
             os.makedirs(next_dir)
-            backup_set.add(next_plugin.dest)
-        for next_getter in conf.gets:
-            if next_getter.type == next_plugin.get_type:
+            backup_set.add(next_plugin['dest'])
+        for next_getter in conf['gets']:
+            if next_getter['type'] == next_plugin['get_type']:
                 if not (get_plugin(next_plugin, next_getter, next_dir) or
                         'skip_on_error' in next_plugin):
                     exit(1)
 
                 break
         else:
-            print('Unknown plugin get type: {0}'.format(next_plugin.get_type))
+            print('Unknown plugin get type: {0}'.format(next_plugin['get_type']))
             exit(3)
 
-    copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf.new_dir_pfx))
+    copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf['new_dir_pfx']))
 
     remove_backup(vim_dir, conf, backup_set)
 
@@ -192,8 +200,7 @@ def copy_local_plugins(source_dir, target_dir):
         local_dir = '.'
     local_dir = os.path.join(local_dir, source_dir)
     if os.path.exists(local_dir):
-        dir_names = dircache.opendir(local_dir)
-        for name in dir_names:
+        for name in os.listdir(local_dir):
             from_dir = os.path.join(local_dir, name)
             if os.path.isdir(from_dir):
                 to_dir = os.path.join(target_dir, name)
