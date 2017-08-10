@@ -101,7 +101,16 @@ def get_run_plugin(plugin, getter, to_dir):
             to_dir = os.path.join(to_dir, plugin['type'])
         os.makedirs(to_dir)
     print('Unpacking {0} to {1}'.format(plugin['url'], to_dir))
-    exec_res = os.system(getter['run'].format(plugin['url'], to_dir))
+    print(
+        getter['run'].format(
+            plugin['url'], to_dir, plugin['ver'] if 'ver' in plugin else ''
+        )
+    )
+    exec_res = os.system(
+        getter['run'].format(
+            plugin['url'], to_dir, plugin['ver'] if 'ver' in plugin else ''
+        )
+    )
     if exec_res != 0:
         return 0
 
