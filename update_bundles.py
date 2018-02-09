@@ -188,7 +188,7 @@ def get_vim_plugins(cmd_args):
         for next_getter in conf['gets']:
             if next_getter['type'] == next_plugin['get_type']:
                 if not (get_plugin(next_plugin, next_getter, next_dir) or
-                        'skip_on_error' in next_plugin):
+                        'skip_on_error' in next_plugin or cmd_args.ignore_errors):
                     exit(1)
 
                 break
@@ -227,6 +227,11 @@ def main():
         '--clean', action='store_const',
         const=True, default=False,
         help='clean .new dirs if exist'
+    )
+    parser.add_argument(
+        '--ignore-errors', action='store_const',
+        const=True, default=False, dest='ignore_errors',
+        help='ignore plugin get errors'
     )
     cmd_args = parser.parse_args()
 
