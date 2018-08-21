@@ -158,6 +158,10 @@ set backspace=indent,eol,start
 set splitright
 " new window below for split
 set splitbelow
+" disable automatic newline at end of file
+if version >= 704
+    set nofixendofline
+endif
 
 " граница переноса
 set wrapmargin=5
