@@ -38,7 +38,7 @@ def backup_dir(dir_name, backup_dir_name):
     """ backup dir """
     if os.path.exists(backup_dir_name):
         print('{0} already exists, remove it first!'.format(backup_dir_name))
-        exit(2)
+        sys.exit(2)
     if os.path.exists(dir_name):
         os.rename(dir_name, backup_dir_name)
 
@@ -94,7 +94,7 @@ def get_run_plugin(plugin, getter, to_dir):
         next_name = next_name.rpartition('.')[0]
     if next_name is None or next_name == '':
         print('{0} parsing name error'.format(plugin['url']))
-        exit(4)
+        sys.exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = os.path.join(to_dir, next_name)
         if 'type' in plugin:
@@ -133,11 +133,11 @@ def get_plugin(plugin, getter, to_dir):
     """ load plugin to to_dir via getter """
     if 'url' in getter:
         return get_url_plugin(plugin, getter, to_dir)
-    elif 'run' in getter:
+    if 'run' in getter:
         return get_run_plugin(plugin, getter, to_dir)
-    else:
-        print('Unknown getter type: {0}'.format(plugin['type']))
-        return 0
+
+    print('Unknown getter type: {0}'.format(plugin['type']))
+    return 0
 
 
 def remove_backup(vim_dir, conf, backup_set):
@@ -182,19 +182,19 @@ def get_vim_plugins(cmd_args):
                     shutil.rmtree(next_dir, onerror=remove_readonly)
                 else:
                     print('{0} already exists, remove it first!'.format(next_dir))
-                    exit(2)
+                    sys.exit(2)
             os.makedirs(next_dir)
             backup_set.add(next_plugin['dest'])
         for next_getter in conf['gets']:
             if next_getter['type'] == next_plugin['get_type']:
                 if not (get_plugin(next_plugin, next_getter, next_dir) or
                         'skip_on_error' in next_plugin or cmd_args.ignore_errors):
-                    exit(1)
+                    sys.exit(1)
 
                 break
         else:
             print('Unknown plugin get type: {0}'.format(next_plugin['get_type']))
-            exit(3)
+            sys.exit(3)
 
     copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf['new_dir_pfx']))
 
@@ -236,7 +236,7 @@ def main():
     cmd_args = parser.parse_args()
 
     get_vim_plugins(cmd_args)
-    exit(0)
+    sys.exit(0)
 
 
 if __name__ == "__main__":
