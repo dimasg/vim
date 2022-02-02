@@ -59,13 +59,13 @@ def get_url_plugin(plugin, getter, to_dir):
     try:
         print('Downloading {0} to {1}'.format(plugin['name'], local_dir))
         url = getter['url'].format(plugin['url'])
-        remote_file = urllib.request.urlopen(url)
-        fileflags = 'w'
-        if plugin['type'] != 'vim':
-            fileflags += 'b'
-        local_file = open(local_file_name, fileflags)
-        local_file.write(remote_file.read())
-        local_file.close()
+        with urllib.request.urlopen(url) as remote_file:
+            fileflags = 'w'
+            if plugin['type'] != 'vim':
+                fileflags += 'b'
+            with open(local_file_name, fileflags) as local_file:
+                local_file.write(remote_file.read())
+                local_file.close()
     except urllib.request.HTTPError as exc:
         print('HTTPError: code={0}, url={1}'.format(exc.code, url))
         return 0
@@ -81,8 +81,8 @@ def get_url_plugin(plugin, getter, to_dir):
             if plugin['extract'] != '':
                 local_dir = os.path.join(local_dir, plugin['extract'])
             print('Extracting {0} to {1}'.format(local_file_name, local_dir))
-            zip_file = zipfile.ZipFile(local_file_name, 'r')
-            zip_file.extractall(local_dir)
+            with zipfile.ZipFile(local_file_name, 'r') as zip_file:
+                zip_file.extractall(local_dir)
 
     return 1
 
@@ -168,7 +168,7 @@ def get_vim_plugins(cmd_args):
         vim_dir = os.path.expanduser("~/.vim")
 
     conf = None
-    with open('plugins.cfg', 'r') as file:
+    with open('plugins.cfg', mode='r', encoding='utf8') as file:
         conf = json.loads(jsmin.jsmin(file.read()))
 
     backup_set = set()
