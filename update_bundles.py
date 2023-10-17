@@ -34,15 +34,6 @@ def remove_readonly(file_name, path, _):
         os.remove(path)
 
 
-def backup_dir(dir_name, backup_dir_name):
-    """ backup dir """
-    if os.path.exists(backup_dir_name):
-        print('{0} already exists, remove it first!'.format(backup_dir_name))
-        sys.exit(2)
-    if os.path.exists(dir_name):
-        os.rename(dir_name, backup_dir_name)
-
-
 def get_url_plugin(plugin, getter, to_dir):
     """ load 'url' plugin """
     if 'no_sub_dirs' in plugin:
