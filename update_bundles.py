@@ -42,13 +42,10 @@ def get_url_plugin(plugin, getter, to_dir):
         to_dir = os.path.join(to_dir, plugin['name'])
         local_dir = os.path.join(to_dir, plugin['type'])
         os.makedirs(local_dir)
-    local_file_name = os.path.join(
-        local_dir,
-        '{0}.{1}'.format(plugin['name'], plugin['ext'])
-    )
+    local_file_name = os.path.join(local_dir, f"{plugin['name']}.{plugin['ext']}")
 
     try:
-        print('Downloading {0} to {1}'.format(plugin['name'], local_dir))
+        print(f"Downloading {plugin['name']} to {local_dir}")
         url = getter['url'].format(plugin['url'])
         with urllib.request.urlopen(url) as remote_file:
             fileflags = 'w'
@@ -58,20 +55,20 @@ def get_url_plugin(plugin, getter, to_dir):
                 local_file.write(remote_file.read())
                 local_file.close()
     except urllib.request.HTTPError as exc:
-        print('HTTPError: code={0}, url={1}'.format(exc.code, url))
+        print(f'HTTPError: code={exc.code}, url={url}')
         return 0
     except urllib.error.URLError as exc:
-        print('URLError: code={0}, url={1}'.format(exc.errno, url))
+        print(f'URLError: code={exc.errno}, url={url}')
         return 0
 
     if 'extract' in plugin:
         if not zipfile.is_zipfile(local_file_name):
-            print('{0} is not valid zip file!'.format(local_file_name))
+            print(f'{local_file_name} is not valid zip file!')
         else:
             local_dir = to_dir
             if plugin['extract'] != '':
                 local_dir = os.path.join(local_dir, plugin['extract'])
-            print('Extracting {0} to {1}'.format(local_file_name, local_dir))
+            print(f'Extracting {local_file_name} to {local_dir}')
             with zipfile.ZipFile(local_file_name, 'r') as zip_file:
                 zip_file.extractall(local_dir)
 
@@ -84,14 +81,14 @@ def get_run_plugin(plugin, getter, to_dir):
     if next_name.find('.') >= 0:
         next_name = next_name.rpartition('.')[0]
     if next_name is None or next_name == '':
-        print('{0} parsing name error'.format(plugin['url']))
+        print(f"{plugin['url']} parsing name error")
         sys.exit(4)
     if 'no_sub_dirs' not in plugin:
         to_dir = os.path.join(to_dir, next_name)
         if 'type' in plugin:
             to_dir = os.path.join(to_dir, plugin['type'])
         os.makedirs(to_dir)
-    print('Unpacking {0} to {1}'.format(plugin['url'], to_dir))
+    print(f"Unpacking {plugin['url']} to {to_dir}")
     run_comand = getter['run'].format(
         plugin['url'], to_dir, plugin['ver'] if 'ver' in plugin else ''
     )
@@ -122,7 +119,7 @@ def get_plugin(plugin, getter, to_dir):
     if 'run' in getter:
         return get_run_plugin(plugin, getter, to_dir)
 
-    print('Unknown getter type: {0}'.format(plugin['type']))
+    print(f"Unknown getter type: {plugin['type']}")
     return 0
 
 
@@ -133,14 +130,14 @@ def remove_backup(vim_dir, conf, backup_set):
         next_dir = os.path.join(vim_dir, backup_set.pop())
         next_old_dir = next_dir + conf['old_dir_pfx']
         if os.path.exists(next_old_dir):
-            print('Removing old backup dir {0}'.format(next_old_dir))
+            print(f'Removing old backup dir {next_old_dir}')
             shutil.rmtree(next_old_dir, onerror=remove_readonly)
         if os.path.exists(next_dir):
-            print('Renaming old dir {0} to backup {1}'.format(next_dir, next_old_dir))
+            print(f'Renaming old dir {next_dir} to backup {next_old_dir}')
             os.rename(next_dir, next_old_dir)
         next_new_dir = next_dir + conf['new_dir_pfx']
         if os.path.exists(next_new_dir):
-            print('Renaming new dir {0} to current {1}'.format(next_new_dir, next_dir))
+            print(f'Renaming new dir {next_new_dir} to current {next_dir}')
             os.rename(next_new_dir, next_dir)
 
 
@@ -164,10 +161,10 @@ def get_vim_plugins(cmd_args):
         if next_plugin['dest'] not in backup_set:
             if os.path.exists(next_dir):
                 if cmd_args.clean:
-                    print('{0} dir removed'.format(next_dir))
+                    print(f'{next_dir} dir removed')
                     shutil.rmtree(next_dir, onerror=remove_readonly)
                 else:
-                    print('{0} already exists, remove it first!'.format(next_dir))
+                    print(f'{next_dir} already exists, remove it first!')
                     sys.exit(2)
             os.makedirs(next_dir)
             backup_set.add(next_plugin['dest'])
@@ -179,7 +176,7 @@ def get_vim_plugins(cmd_args):
 
                 break
         else:
-            print('Unknown plugin get type: {0}'.format(next_plugin['get_type']))
+            print(f'Unknown plugin get type: {next_plugin["get_type"]}')
             sys.exit(3)
 
     copy_local_plugins('local', os.path.join(vim_dir, 'bundle' + conf['new_dir_pfx']))
@@ -199,9 +196,7 @@ def copy_local_plugins(source_dir, target_dir):
             from_dir = os.path.join(local_dir, name)
             if os.path.isdir(from_dir):
                 to_dir = os.path.join(target_dir, name)
-                print('Copying local files from {0} to {1}'.format(
-                    from_dir, to_dir
-                ))
+                print(f'Copying local files from {from_dir} to {to_dir}')
                 shutil.copytree(from_dir, to_dir)
 
 
