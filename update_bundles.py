@@ -47,13 +47,7 @@ def get_url_plugin(plugin, getter, to_dir):
     try:
         print(f"Downloading {plugin['name']} to {local_dir}")
         url = getter['url'].format(plugin['url'])
-        with urllib.request.urlopen(url) as remote_file:
-            fileflags = 'w'
-            if plugin['type'] != 'vim':
-                fileflags += 'b'
-            with open(local_file_name, fileflags) as local_file:
-                local_file.write(remote_file.read())
-                local_file.close()
+        urllib.request.urlretrieve(url, local_file_name)
     except urllib.request.HTTPError as exc:
         print(f'HTTPError: code={exc.code}, url={url}')
         return 0
